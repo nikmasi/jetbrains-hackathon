@@ -44,7 +44,7 @@ class TaskoToolWindow : ToolWindowFactory {
                     add(JBScrollPane(JBBox.createVerticalBox().apply {
                         alignmentY = Component.TOP_ALIGNMENT
                         add(UserLoginComponent(::onLoginSuccess).getContent().apply { maximumSize = preferredSize })
-                        add(UserRegistrationComponent().getContent().apply { maximumSize = preferredSize })
+                        add(UserRegistrationComponent(::onLoginSuccess).getContent().apply { maximumSize = preferredSize })
                     }), BorderLayout.CENTER)
                 }
                 else {
