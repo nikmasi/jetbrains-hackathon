@@ -5,6 +5,8 @@ import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBPanel
 import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
+import org.delite.alt.ctrl.taskoplugin.models.User
+import org.delite.alt.ctrl.taskoplugin.services.UserService
 
 import java.awt.BorderLayout
 import java.awt.Font
@@ -16,7 +18,7 @@ import javax.swing.JButton
 import javax.swing.JComponent
 import javax.swing.SwingConstants
 
-class UserRegistrationComponent {
+class UserRegistrationComponent(private val onRegisterSuccess: (User) -> Unit) {
     private val content = JBPanel<JBPanel<*>>().apply {
         add(JBBox.createVerticalBox().apply {
             val firstNameField = JBTextField().apply { columns = 30 }
@@ -67,6 +69,7 @@ class UserRegistrationComponent {
 
             registerButton.addActionListener {
                 /* TODO: Send register request */
+                UserService.register(firstNameField.text, lastNameField.text, usernameField.text, emailField.text, firstPasswordField.text)
             }
         })
     }
