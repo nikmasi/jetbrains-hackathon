@@ -7,8 +7,12 @@ import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
 import java.awt.BorderLayout
 import java.awt.Font
+import java.awt.GridBagConstraints
+import java.awt.GridBagLayout
+import java.awt.Insets
 import javax.swing.Box
 import javax.swing.JButton
+import javax.swing.JComponent
 import javax.swing.SwingConstants
 
 class UserLoginWindow {
@@ -21,22 +25,42 @@ class UserLoginWindow {
             add(JBLabel("~ Login ~").apply {
                 font = font.deriveFont(Font.BOLD, 16f)
                 horizontalAlignment = SwingConstants.CENTER
-            }, BorderLayout.NORTH)
-            add(Box.createVerticalStrut(10))
-
-            add(JBPanel<JBPanel<*>>(BorderLayout()).apply {
-                add(JBLabel("Username: "), BorderLayout.WEST)
-                add(usernameField, BorderLayout.CENTER)
             })
 
-            add(JBPanel<JBPanel<*>>(BorderLayout()).apply {
-                add(JBLabel("Password: "), BorderLayout.WEST)
-                add(passwordField, BorderLayout.CENTER)
+            add(Box.createVerticalStrut(10))
+
+            add(JBPanel<JBPanel<*>>(GridBagLayout()).apply {
+                val gbc = GridBagConstraints().apply {
+                    fill = GridBagConstraints.HORIZONTAL
+                    insets = Insets(6, 6, 6, 6)
+                }
+
+                fun addRow(y: Int, labelText: String, field: JComponent) {
+                    gbc.gridx = 0
+                    gbc.gridy = y
+                    gbc.weightx = 0.0
+                    gbc.anchor = GridBagConstraints.EAST
+                    add(JBLabel(labelText), gbc)
+
+                    gbc.gridx = 1
+                    gbc.weightx = 1.0
+                    gbc.anchor = GridBagConstraints.WEST
+                    add(field, gbc)
+                }
+
+                addRow(4, "Username:", usernameField)
+                addRow(5, "Password:", passwordField)
             })
 
             add(JBPanel<JBPanel<*>>(BorderLayout()).apply {
                 add(loginButton, BorderLayout.CENTER)
             })
+
+            add(Box.createVerticalStrut(10))
+
+            loginButton.addActionListener {
+                /* TODO: Send login request */
+            }
         })
     }
 

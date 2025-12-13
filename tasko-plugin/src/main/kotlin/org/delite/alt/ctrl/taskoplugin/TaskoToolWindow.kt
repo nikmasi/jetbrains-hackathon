@@ -5,7 +5,10 @@ import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.components.JBBox
 import com.intellij.ui.components.JBPanel
+import com.intellij.ui.components.JBScrollPane
 import com.intellij.ui.content.ContentFactory
+import java.awt.BorderLayout
+import java.awt.Component
 import javax.swing.JSeparator
 import javax.swing.SwingConstants
 
@@ -20,12 +23,14 @@ class TaskoToolWindow : ToolWindowFactory {
 
     class MyToolWindow {
         private val content = JBPanel<JBPanel<*>>().apply {
-            if (true /* Check if already logged in! */) {
-                add(JBBox.createVerticalBox().apply {
-                    add(UserLoginWindow().getContent())
-                    add(JSeparator(SwingConstants.HORIZONTAL))
-                    add(UserRegistrationWindow().getContent())
-                })
+            layout = BorderLayout()
+
+            if (true /* TODO: Check if already logged in! */) {
+                add(JBScrollPane(JBBox.createVerticalBox().apply {
+                    alignmentY = Component.TOP_ALIGNMENT
+                    add(UserLoginWindow().getContent().apply { maximumSize = preferredSize })
+                    add(UserRegistrationWindow().getContent().apply { maximumSize = preferredSize })
+                }), BorderLayout.CENTER)
             }
         }
 
