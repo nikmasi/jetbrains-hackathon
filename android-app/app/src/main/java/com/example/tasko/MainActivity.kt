@@ -51,7 +51,7 @@ fun rememberCurrentRoute(navController: NavController): String {
 
 @Composable
 fun TaskoApp() {
-    val MyViewModel: MyViewModel = hiltViewModel()
+    val myViewModel: MyViewModel = hiltViewModel()
     val navController = rememberNavController()
     val currentRoute = rememberCurrentRoute(navController)
 
@@ -69,7 +69,7 @@ fun TaskoApp() {
             startDestination = Destinations.LoginScreen.route
         ) {
             composable(route = Destinations.LoginScreen.route){
-                LoginScreen(navController=navController)
+                LoginScreen(navController=navController, myViewModel = myViewModel)
             }
             composable(route = Destinations.RegistrationScreen.route){
                 RegistrationScreen(navController) { firstName, lastName, username, email, password ->
@@ -106,7 +106,8 @@ fun TaskoApp() {
                     onLogoutClick = {
                         // Ovde ide logika za logout
                         println("Logout clicked")
-                    }
+                    },
+                    myViewModel = myViewModel
                 )
             }
         }

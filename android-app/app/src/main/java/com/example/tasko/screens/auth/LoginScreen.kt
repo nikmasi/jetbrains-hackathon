@@ -23,6 +23,8 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
@@ -38,12 +41,23 @@ import androidx.compose.ui.unit.sp
 import androidx.lint.kotlin.metadata.Visibility
 import androidx.navigation.NavController
 import com.example.tasko.screens.Destinations
+import com.example.tasko.viewModels.MyViewModel
 
 @Composable
-fun LoginScreen(navController: NavController){
+fun LoginScreen(navController: NavController, myViewModel: MyViewModel){
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+    val uiState by myViewModel.uiState.collectAsState()
+
+    // Ako je uspešan login, navigiraj
+    if (uiState.isLoggedIn) {
+        LaunchedEffect(Unit) {
+            navController.navigate(Destinations.ProjectScreen.route) {
+                popUpTo(Destinations.LoginScreen.route) { inclusive = true }
+            }
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -67,9 +81,9 @@ fun LoginScreen(navController: NavController){
             OutlinedTextField(
                 value = username,
                 onValueChange = { username = it },
-                label = { Text("Username", color = Color.LightGray) },
+                label = { Text("Username", color = Color.White) },
                 singleLine = true,
-
+                textStyle = TextStyle(color = Color.White),
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -78,7 +92,7 @@ fun LoginScreen(navController: NavController){
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text("Password", color = Color.LightGray) },
+                label = { Text("Password", color = Color.White) },
                 singleLine = true,
                 visualTransformation =  VisualTransformation.None ,
                 trailingIcon = {
@@ -91,8 +105,7 @@ fun LoginScreen(navController: NavController){
                     }
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-
-
+                textStyle = TextStyle(color = Color.White),
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -100,7 +113,8 @@ fun LoginScreen(navController: NavController){
 
             Button(
                 onClick = {
-                    navController.navigate(Destinations.ProjectScreen.route)
+                    myViewModel.fetchLogin(username,password)
+                    //navController.navigate(Destinations.ProjectScreen.route)
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF444444))

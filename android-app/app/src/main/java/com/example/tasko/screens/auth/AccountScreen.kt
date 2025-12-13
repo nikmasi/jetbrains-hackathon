@@ -9,12 +9,16 @@ import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import com.example.tasko.viewModels.MyViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -22,8 +26,10 @@ fun AccountScreen(
     userName: String,
     userEmail: String,
     onBackClick: () -> Unit,
-    onLogoutClick: () -> Unit
+    onLogoutClick: () -> Unit,
+    myViewModel: MyViewModel
 ) {
+    val username by myViewModel.usernameFlow.collectAsState(initial = "")
     Scaffold(
         topBar = {
             TopAppBar(
@@ -64,23 +70,20 @@ fun AccountScreen(
                             )
                             Spacer(modifier = Modifier.width(16.dp))
                             Column {
-                                Text(
-                                    text = userName,
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color.White
-                                )
-                                Text(
-                                    text = userEmail,
-                                    fontSize = 14.sp,
-                                    color = Color.LightGray
-                                )
+                                username?.let {
+                                    Text(
+                                        text = it,
+                                        fontSize = 18.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color.White
+                                    )
+                                }
+
                             }
                         }
                     }
                 }
 
-                // Settings Card
                 Card(
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(containerColor = Color(0xFF444444)),
@@ -100,11 +103,9 @@ fun AccountScreen(
                             color = Color.White,
                             modifier = Modifier.weight(1f)
                         )
-                        // Ovde možeš dodati ikonicu za navigaciju ili indikator
                     }
                 }
 
-                // Logout Card
                 Card(
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(containerColor = Color(0xFF444444)),

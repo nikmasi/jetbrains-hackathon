@@ -1,9 +1,12 @@
 package com.example.tasko.data.retrofit
 
+import com.example.tasko.data.retrofit.models.MessageResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import com.example.tasko.data.retrofit.models.Obaveza
+import com.example.tasko.data.retrofit.models.User
+import com.example.tasko.data.retrofit.models.UserRequest
 
 const val BASE_URL = "http://10.0.2.2:8080/"
 
@@ -13,12 +16,12 @@ interface ObavezaApi {
 
     @POST("obaveza")
     suspend fun createObaveza(@Body obaveza: Obaveza):Obaveza
-    /*
-    @POST("dohvatiObaveza")
-    suspend fun dohvatiObaveza(@Body id: IdObaveza): Obaveza
 
-    @POST("oznaciObaveza")
-    suspend fun oznaciObaveza(@Body id: IdObaveza): Obaveza
-    */
+
+    @POST("logIn")
+    suspend fun logIn(@Body userReq: UserRequest): MessageResponse
+
+    @POST("signUp")
+    suspend fun signUp(@Body user: User): MessageResponse
 
 }
