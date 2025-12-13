@@ -21,10 +21,7 @@ class TaskComponent(val task: Task) {
         )
 
         add(JBBox.createVerticalBox().apply {
-            add(JBLabel(task.title).apply {
-                font = font.deriveFont(Font.BOLD, 16f)
-                horizontalAlignment = SwingConstants.CENTER
-            })
+            add(JBLabel(task.title).apply { font = font.deriveFont(Font.BOLD, 16f) })
 
             add(JSeparator(SwingConstants.HORIZONTAL))
 

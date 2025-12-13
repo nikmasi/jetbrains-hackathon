@@ -32,4 +32,9 @@ object TaskListService {
     fun getTaskListsByProject(idProject: Int): List<TaskList> {
         return taskLists.filter { it.id_project == idProject }.sortedBy { it.position }
     }
+
+    fun addTaskList(idProject: Int, name: String) {
+        val nextPosition = taskLists.filter { it.id_project == idProject }.maxOfOrNull { it.position }?.plus(1) ?: 0
+        taskLists.addLast(TaskList(id=taskLists.size + 1, id_project = idProject, name=name, time_created = LocalDateTime.now(), position = nextPosition))
+    }
 }
