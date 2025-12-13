@@ -5,16 +5,15 @@
 
     <!-- Public plugin name should be written in Title Case.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/best-practices-for-listing.html#plugin-name -->
-    <name>Tasko-plugin</name>
+    <name>TaskoPlugin</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-    <vendor url="https://www.yourcompany.com">YourCompany</vendor>
+    <vendor url="">CtrlAltDelite</vendor>
 
     <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/best-practices-for-listing.html#plugin-description -->
     <description><![CDATA[
-        Enter short description for your plugin here.<br>
-        <em>most HTML tags may be used</em>
+        Plugin that helps you organize tasks with kanban.
     ]]></description>
 
     <!-- Product and plugin compatibility requirements.
@@ -25,8 +24,12 @@
     <resource-bundle>messages.MyMessageBundle</resource-bundle>
     <!-- Extensions defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow id="MyToolWindow" factoryClass="org.delite.alt.ctrl.taskoplugin.MyToolWindowFactory"
-                    icon="AllIcons.Toolwindows.ToolWindowPalette"/>
+        <toolWindow id="Tasko!"
+                    factoryClass="org.delite.alt.ctrl.taskoplugin.TaskoToolWindow"
+                    icon="AllIcons.Toolwindows.ToolWindowPalette"
+                    anchor="right"
+                    canCloseContents="false"/>
     </extensions>
 </idea-plugin>

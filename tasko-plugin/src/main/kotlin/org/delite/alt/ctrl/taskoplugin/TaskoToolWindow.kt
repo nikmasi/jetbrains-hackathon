@@ -3,13 +3,13 @@ package org.delite.alt.ctrl.taskoplugin
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
-import com.intellij.ui.components.JBLabel
+import com.intellij.ui.components.JBBox
 import com.intellij.ui.components.JBPanel
 import com.intellij.ui.content.ContentFactory
-import javax.swing.JButton
-import kotlin.random.Random
+import javax.swing.JSeparator
+import javax.swing.SwingConstants
 
-class MyToolWindowFactory : ToolWindowFactory {
+class TaskoToolWindow : ToolWindowFactory {
     override fun shouldBeAvailable(project: Project) = true
 
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
@@ -20,14 +20,13 @@ class MyToolWindowFactory : ToolWindowFactory {
 
     class MyToolWindow {
         private val content = JBPanel<JBPanel<*>>().apply {
-            val label = JBLabel("The random number is: ?")
-
-            add(label)
-            add(JButton("Shuffle").apply {
-                addActionListener {
-                    label.text = "The random number is: " + Random(System.currentTimeMillis()).nextInt(1000)
-                }
-            })
+            if (true /* Check if already logged in! */) {
+                add(JBBox.createVerticalBox().apply {
+                    add(UserLoginWindow().getContent())
+                    add(JSeparator(SwingConstants.HORIZONTAL))
+                    add(UserRegistrationWindow().getContent())
+                })
+            }
         }
 
         fun getContent(): JBPanel<JBPanel<*>> = content
