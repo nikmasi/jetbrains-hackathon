@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 data class Project (
     val id: Int,
     val name: String,
-    val idOwner: Int,
-    val timeCreated: LocalDateTime,
-    val timeLastChange: LocalDateTime
+    val id_owner: Int,
+    val time_created: LocalDateTime,
+    val time_last_change: LocalDateTime
 )

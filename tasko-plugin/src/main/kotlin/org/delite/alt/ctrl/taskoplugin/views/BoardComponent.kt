@@ -1,30 +1,63 @@
 package org.delite.alt.ctrl.taskoplugin.views
 
+import com.intellij.openapi.project.Project
+import com.intellij.ui.JBColor
 import java.awt.Color
 import com.intellij.ui.components.JBBox
 import com.intellij.ui.components.JBPanel
+import com.intellij.openapi.ui.ComboBox
 import org.delite.alt.ctrl.taskoplugin.models.Task
+import org.delite.alt.ctrl.taskoplugin.services.TaskListService
 import org.delite.alt.ctrl.taskoplugin.services.TaskService
+import org.jetbrains.kotlin.idea.gradleTooling.get
+import com.intellij.openapi.ui.Messages
+import org.delite.alt.ctrl.taskoplugin.models.TaskList
+import javax.swing.BoxLayout
+import javax.swing.JButton
+import javax.swing.JPanel
+import java.awt.event.ItemEvent
 
-class BoardComponent {
-    private val content = JBPanel<JBPanel<*>>().apply {
-        add(JBBox.createHorizontalBox().apply {
-            for (i in 1..3) {
-                add(JBBox.createVerticalBox().apply {
-                    for (t in TaskService.getTasks(1)) {
-                        add(TaskComponent(t).getContent())
-                    }
+class BoardComponent(val project: Project) {
+    private val content = JBPanel<JBPanel<*>>()
 
-                    for (t in TaskService.getTasks(1)) {
-                        add(TaskComponent(t).getContent())
-                    }
+    init {
+        refreshUI(1)
+    }
 
-                    for (t in TaskService.getTasks(1)) {
-                        add(TaskComponent(t).getContent())
+    fun refreshUI(taskListIdx: Int) {
+        content.removeAll()
+
+        content.add(JBBox.createVerticalBox().apply {
+            /* TODO: Fetch projectID somehow? */
+            val taskLists = TaskListService.getTaskListsByProject(1)
+            val taskListSwitcher = ComboBox(taskLists.map { it.name }.toTypedArray())
+
+            taskListSwitcher.addItemListener { e ->
+                if (e.stateChange == ItemEvent.SELECTED) {
+                    val index = taskListSwitcher.selectedIndex
+                    /* TODO: Dodati logiku menjanja prikazanih taskova */
+                }
+            }
+
+            add(JPanel().apply {
+                add(taskListSwitcher)
+                add(JButton("+").apply {
+                    addActionListener {
+                        val ime: String = Messages.showInputDialog(project, "Enter name of the list!", "Name", Messages.getQuestionIcon()) ?: "ERROR"
+                        /* TODO: Dodati logiku dodavanja */
                     }
                 })
-            }
+            })
+
+            add(JBBox.createVerticalBox().apply {
+                for (t in TaskService.getTasks(taskListIdx)) {
+                    add(TaskComponent(t).getContent())
+                }
+            })
         })
+
+        content.revalidate()
+        content.repaint()
     }
 
     fun getContent(): JBPanel<JBPanel<*>> = content

@@ -50,7 +50,7 @@ class TaskoToolWindow : ToolWindowFactory {
                 else {
                     add(JBScrollPane(JBBox.createVerticalBox().apply {
                         alignmentY = Component.TOP_ALIGNMENT
-                        add(BoardComponent().getContent().apply { maximumSize = preferredSize })
+                        add(BoardComponent(project).getContent().apply { maximumSize = preferredSize })
                     }), BorderLayout.CENTER)
                 }
             }

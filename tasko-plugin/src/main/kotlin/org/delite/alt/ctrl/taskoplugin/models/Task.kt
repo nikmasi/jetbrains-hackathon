@@ -4,11 +4,11 @@ import java.time.LocalDateTime
 
 data class Task(
     val id: Int = 0,
-    val idTaskList: Int,
+    val id_task_list: Int,
     val title: String,
-    val body: String,
+    val body_text : String,
     val position: Int,
-    val timeCreated: LocalDateTime,
-    var timeChanged: LocalDateTime,
-    var checked: Boolean
+    var checked: Boolean,
+    val time_created: LocalDateTime,
+    var time_changed: LocalDateTime,
 )

@@ -16,10 +16,10 @@ class TaskComponent(val task: Task) {
 
             add(JSeparator(SwingConstants.HORIZONTAL))
 
-            if (task.body.length > TaskoConstants.TASK_MAXIMUM_BODY_SIZE)
-                add(JBLabel("${task.body.take(TaskoConstants.TASK_MAXIMUM_BODY_SIZE)}..."))
+            if (task.body_text.length > TaskoConstants.TASK_MAXIMUM_BODY_SIZE)
+                add(JBLabel("${task.body_text.take(TaskoConstants.TASK_MAXIMUM_BODY_SIZE)}..."))
             else
-                add(JBLabel(task.body))
+                add(JBLabel(task.body_text))
         })
     }
 
