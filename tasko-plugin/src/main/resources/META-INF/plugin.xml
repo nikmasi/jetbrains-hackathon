@@ -27,7 +27,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow id="Tasko!"
-                    factoryClass="org.delite.alt.ctrl.taskoplugin.TaskoToolWindow"
+                    factoryClass="org.delite.alt.ctrl.taskoplugin.views.TaskoToolWindow"
                     icon="AllIcons.Toolwindows.ToolWindowPalette"
                     anchor="right"
                     canCloseContents="false"/>

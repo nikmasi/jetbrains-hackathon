@@ -1,10 +1,12 @@
-package org.delite.alt.ctrl.taskoplugin
+package org.delite.alt.ctrl.taskoplugin.views
 
 import com.intellij.ui.components.JBBox
 import com.intellij.ui.components.JBPanel
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
+import org.delite.alt.ctrl.taskoplugin.models.User
+import org.delite.alt.ctrl.taskoplugin.services.UserService
 import java.awt.BorderLayout
 import java.awt.Font
 import java.awt.GridBagConstraints
@@ -15,7 +17,7 @@ import javax.swing.JButton
 import javax.swing.JComponent
 import javax.swing.SwingConstants
 
-class UserLoginComponent {
+class UserLoginComponent(private val onLoginSuccess: (User?) -> Unit) {
     private val content = JBPanel<JBPanel<*>>().apply {
         add(JBBox.createVerticalBox().apply {
             val usernameField = JBTextField().apply { columns = 30 }
@@ -59,7 +61,7 @@ class UserLoginComponent {
             add(Box.createVerticalStrut(10))
 
             loginButton.addActionListener {
-                /* TODO: Send login request */
+                onLoginSuccess(UserService.login(usernameField.text, passwordField.text))
             }
         })
     }

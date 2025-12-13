@@ -1,4 +1,4 @@
-package org.delite.alt.ctrl.taskoplugin
+package org.delite.alt.ctrl.taskoplugin.views
 
 import com.intellij.ui.components.JBBox
 import com.intellij.ui.components.JBLabel
