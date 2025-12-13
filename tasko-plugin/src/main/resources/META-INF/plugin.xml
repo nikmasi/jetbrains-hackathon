@@ -8,7 +8,7 @@
     <name>TaskoPlugin</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-    <vendor url="">CtrlAltDelite</vendor>
+    <vendor url="https://www.ctrl.alt.delite.does.not.exist.com">CtrlAltDelite</vendor>
 
     <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/best-practices-for-listing.html#plugin-description -->
