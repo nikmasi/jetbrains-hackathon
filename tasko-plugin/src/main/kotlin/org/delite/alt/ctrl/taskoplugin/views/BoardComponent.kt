@@ -16,6 +16,7 @@ import javax.swing.BoxLayout
 import javax.swing.JButton
 import javax.swing.JPanel
 import java.awt.event.ItemEvent
+import javax.swing.Box
 
 class BoardComponent(val project: Project) {
     private val content = JBPanel<JBPanel<*>>()
@@ -28,14 +29,13 @@ class BoardComponent(val project: Project) {
         content.removeAll()
 
         content.add(JBBox.createVerticalBox().apply {
-            /* TODO: Fetch projectID somehow? */
             val taskLists = TaskListService.getTaskListsByProject(1)
             val taskListSwitcher = ComboBox(taskLists.map { it.name }.toTypedArray())
 
             taskListSwitcher.addItemListener { e ->
                 if (e.stateChange == ItemEvent.SELECTED) {
                     val index = taskListSwitcher.selectedIndex
-                    /* TODO: Dodati logiku menjanja prikazanih taskova */
+                    refreshUI(taskLists[index].id)
                 }
             }
 
@@ -52,6 +52,7 @@ class BoardComponent(val project: Project) {
             add(JBBox.createVerticalBox().apply {
                 for (t in TaskService.getTasks(taskListIdx)) {
                     add(TaskComponent(t).getContent())
+                    add(Box.createVerticalStrut(10))
                 }
             })
         })
