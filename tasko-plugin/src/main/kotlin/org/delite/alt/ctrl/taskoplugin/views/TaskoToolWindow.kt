@@ -40,7 +40,7 @@ class TaskoToolWindow : ToolWindowFactory {
             content.apply {
                 layout = BorderLayout()
 
-                if (true /* TODO: Check if already logged in! */) {
+                if (false /* TODO: Check if already logged in! */) {
                     add(JBScrollPane(JBBox.createVerticalBox().apply {
                         alignmentY = Component.TOP_ALIGNMENT
                         add(UserLoginComponent(::onLoginSuccess).getContent().apply { maximumSize = preferredSize })
