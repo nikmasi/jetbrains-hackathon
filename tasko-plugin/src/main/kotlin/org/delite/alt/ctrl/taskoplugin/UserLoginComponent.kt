@@ -1,11 +1,10 @@
 package org.delite.alt.ctrl.taskoplugin
 
 import com.intellij.ui.components.JBBox
-import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBPanel
+import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
-
 import java.awt.BorderLayout
 import java.awt.Font
 import java.awt.GridBagConstraints
@@ -16,18 +15,14 @@ import javax.swing.JButton
 import javax.swing.JComponent
 import javax.swing.SwingConstants
 
-class UserRegistrationWindow {
+class UserLoginComponent {
     private val content = JBPanel<JBPanel<*>>().apply {
         add(JBBox.createVerticalBox().apply {
-            val firstNameField = JBTextField().apply { columns = 30 }
-            val lastNameField = JBTextField().apply { columns = 30 }
-            val emailField = JBTextField().apply { columns = 30 }
             val usernameField = JBTextField().apply { columns = 30 }
-            val firstPasswordField = JBPasswordField().apply { columns = 30 }
-            val secondPasswordField = JBPasswordField().apply { columns = 30 }
-            val registerButton = JButton("Register")
+            val passwordField = JBPasswordField().apply { columns = 30 }
+            val loginButton = JButton("Login")
 
-            add(JBLabel("~ Register ~").apply {
+            add(JBLabel("~ Login ~").apply {
                 font = font.deriveFont(Font.BOLD, 16f)
                 horizontalAlignment = SwingConstants.CENTER
             })
@@ -53,20 +48,18 @@ class UserRegistrationWindow {
                     add(field, gbc)
                 }
 
-                addRow(1, "Firstname:", firstNameField)
-                addRow(2, "Lastname:", lastNameField)
-                addRow(3, "Email:", emailField)
                 addRow(4, "Username:", usernameField)
-                addRow(5, "Password:", firstPasswordField)
-                addRow(6, "Confirm password:", secondPasswordField)
+                addRow(5, "Password:", passwordField)
             })
 
             add(JBPanel<JBPanel<*>>(BorderLayout()).apply {
-                add(registerButton, BorderLayout.CENTER)
+                add(loginButton, BorderLayout.CENTER)
             })
 
-            registerButton.addActionListener {
-                /* TODO: Send register request */
+            add(Box.createVerticalStrut(10))
+
+            loginButton.addActionListener {
+                /* TODO: Send login request */
             }
         })
     }

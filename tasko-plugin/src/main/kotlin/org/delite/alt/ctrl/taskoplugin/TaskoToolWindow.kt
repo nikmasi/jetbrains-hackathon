@@ -9,8 +9,6 @@ import com.intellij.ui.components.JBScrollPane
 import com.intellij.ui.content.ContentFactory
 import java.awt.BorderLayout
 import java.awt.Component
-import javax.swing.JSeparator
-import javax.swing.SwingConstants
 
 class TaskoToolWindow : ToolWindowFactory {
     override fun shouldBeAvailable(project: Project) = true
@@ -25,12 +23,15 @@ class TaskoToolWindow : ToolWindowFactory {
         private val content = JBPanel<JBPanel<*>>().apply {
             layout = BorderLayout()
 
-            if (true /* TODO: Check if already logged in! */) {
+            if (false /* TODO: Check if already logged in! */) {
                 add(JBScrollPane(JBBox.createVerticalBox().apply {
                     alignmentY = Component.TOP_ALIGNMENT
-                    add(UserLoginWindow().getContent().apply { maximumSize = preferredSize })
-                    add(UserRegistrationWindow().getContent().apply { maximumSize = preferredSize })
+                    add(UserLoginComponent().getContent().apply { maximumSize = preferredSize })
+                    add(UserRegistrationComponent().getContent().apply { maximumSize = preferredSize })
                 }), BorderLayout.CENTER)
+            }
+            else {
+
             }
         }
 
