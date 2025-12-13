@@ -1,10 +1,23 @@
 package com.example.tasko.data.retrofit.models
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class User(
-    val Id: Int,
-    val FirstName: String,
-    val LastName: String,
-    val Username: String,
-    val EmailAddress: String,
-    val HashedPassword:String
+    val first_name:String,
+    val last_name:String,
+    val username:String,
+    val email_address:String,
+    val hashed_password:String
+)
+
+@Serializable
+data class UserRequest(
+    val username:String,
+    val hashed_password:String
+)
+
+@Serializable
+data class MessageResponse(
+    val message: String
 )
