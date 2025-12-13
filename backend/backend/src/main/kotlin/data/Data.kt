@@ -1,6 +1,7 @@
 package com.example.data
 
 import kotlinx.serialization.Serializable
+//import java.time.Instant
 
 @Serializable
 data class User(
@@ -23,3 +24,48 @@ data class MessageResponse(
     val message: String
 )
 
+@Serializable
+data class Project(
+    val id:Int,
+    val name:String,
+    val id_owner:Int
+    //val time_created:Instant,
+    //val time_last_change:Instant
+)
+
+@Serializable
+data class ProjectUsers(
+    val id_project:Int,
+    val id_user:Int,
+    //val time_joined:Instant
+)
+
+@Serializable
+data class ProjectInvites(
+    val id_project:Int,
+    val id_user:Int,
+    //val time_sent:Instant
+)
+
+@Serializable
+data class TaskLists(
+    val id:Int,
+    val id_project:Int,
+    val name:String,
+    val position:Int,
+    val id_user_created:Int
+    //val time_created:Instant
+)
+
+@Serializable
+data class Task(
+    val id:Int,
+    val id_task_list:Int,
+    val title:String,
+    val body_text:String,
+    val position:Int,
+    val checked:Int,
+    val id_user_created:Int
+    //val time_created:Instant
+    //val time_changed:Instant
+)

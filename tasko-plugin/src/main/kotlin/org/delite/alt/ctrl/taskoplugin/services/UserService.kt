@@ -11,7 +11,7 @@ object UserService {
     )
 
     fun login(username: String, password: String): User? {
-        return users.find { it.username == username && it.password == password }
+        return users.find { it.username == username && it.hashed_password == password }
     }
 
     fun register(firstName: String, lastName: String, username: String, emailAddress: String, password: String): User {
