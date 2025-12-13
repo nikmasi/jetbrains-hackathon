@@ -57,9 +57,13 @@ CREATE TABLE task_lists (
     name VARCHAR(255) DEFAULT '',
     position INT NOT NULL DEFAULT 0,
     time_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	id_user_created INT,
 
     CONSTRAINT fk_tl_project
         FOREIGN KEY (id_project) REFERENCES projects(id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_tl_user
+        FOREIGN KEY (id_user_created) REFERENCES users(id)
         ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
@@ -72,8 +76,12 @@ CREATE TABLE tasks (
 	checked INT DEFAULT 0,
     time_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     time_changed TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	id_user_created INT,
 
     CONSTRAINT fk_task_list
         FOREIGN KEY (id_task_list) REFERENCES task_lists(id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_task_user
+        FOREIGN KEY (id_user_created) REFERENCES users(id)
         ON DELETE CASCADE
 ) ENGINE=InnoDB;
