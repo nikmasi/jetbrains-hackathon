@@ -4,15 +4,26 @@ import java.awt.Color
 import com.intellij.ui.components.JBBox
 import com.intellij.ui.components.JBPanel
 import org.delite.alt.ctrl.taskoplugin.models.Task
+import org.delite.alt.ctrl.taskoplugin.services.TaskService
 
 class BoardComponent {
     private val content = JBPanel<JBPanel<*>>().apply {
         add(JBBox.createHorizontalBox().apply {
-            add(JBBox.createVerticalBox().apply {
-                background = Color.decode("#454545")
+            for (i in 1..3) {
+                add(JBBox.createVerticalBox().apply {
+                    for (t in TaskService.getTasks(1)) {
+                        add(TaskComponent(t).getContent())
+                    }
 
-                // add(TaskComponent().getContent())
-            })
+                    for (t in TaskService.getTasks(1)) {
+                        add(TaskComponent(t).getContent())
+                    }
+
+                    for (t in TaskService.getTasks(1)) {
+                        add(TaskComponent(t).getContent())
+                    }
+                })
+            }
         })
     }
 

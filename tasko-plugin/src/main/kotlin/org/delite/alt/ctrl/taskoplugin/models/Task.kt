@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 data class Task(
     val id: Int = 0,
-    val idTaskList: List<Int>,
+    val idTaskList: Int,
     val title: String,
     val body: String,
     val position: Int,

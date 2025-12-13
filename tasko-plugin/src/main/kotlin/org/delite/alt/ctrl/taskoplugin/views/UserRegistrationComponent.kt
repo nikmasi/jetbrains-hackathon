@@ -1,10 +1,13 @@
 package org.delite.alt.ctrl.taskoplugin.views
 
+import com.intellij.ui.JBColor
 import com.intellij.ui.components.JBBox
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBPanel
 import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
+import org.delite.alt.ctrl.taskoplugin.models.User
+import org.delite.alt.ctrl.taskoplugin.services.UserService
 
 import java.awt.BorderLayout
 import java.awt.Font
@@ -16,15 +19,23 @@ import javax.swing.JButton
 import javax.swing.JComponent
 import javax.swing.SwingConstants
 
-class UserRegistrationComponent {
+class UserRegistrationComponent(private val onRegisterSuccess: (User) -> Unit) {
     private val content = JBPanel<JBPanel<*>>().apply {
         add(JBBox.createVerticalBox().apply {
             val firstNameField = JBTextField().apply { columns = 30 }
             val lastNameField = JBTextField().apply { columns = 30 }
+
             val emailField = JBTextField().apply { columns = 30 }
             val usernameField = JBTextField().apply { columns = 30 }
+
             val firstPasswordField = JBPasswordField().apply { columns = 30 }
             val secondPasswordField = JBPasswordField().apply { columns = 30 }
+
+            val errorMessageLabel = JBLabel().apply {
+                font = font.deriveFont(Font.BOLD)
+                foreground = JBColor.RED
+            }
+
             val registerButton = JButton("Register")
 
             add(JBLabel("~ Register ~").apply {
@@ -62,11 +73,25 @@ class UserRegistrationComponent {
             })
 
             add(JBPanel<JBPanel<*>>(BorderLayout()).apply {
+                add(errorMessageLabel, BorderLayout.NORTH)
                 add(registerButton, BorderLayout.CENTER)
             })
 
+            add(Box.createVerticalStrut(10))
+
             registerButton.addActionListener {
-                /* TODO: Send register request */
+                if (firstPasswordField.text != secondPasswordField.text) {
+                    errorMessageLabel.text = "Registration failed. Passwords don't match."
+                }
+                else {
+                    val user = UserService.register(firstNameField.text, lastNameField.text, usernameField.text, emailField.text, firstPasswordField.text)
+                    if (user != null) {
+                        onRegisterSuccess(user)
+                    }
+                    else {
+                        errorMessageLabel.text = "Registration failed! User with that username might already exist, also please check the email that you have entered!"
+                    }
+                }
             }
         })
     }

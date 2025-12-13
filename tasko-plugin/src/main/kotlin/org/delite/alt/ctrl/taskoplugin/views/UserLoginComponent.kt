@@ -1,5 +1,6 @@
 package org.delite.alt.ctrl.taskoplugin.views
 
+import com.intellij.ui.JBColor
 import com.intellij.ui.components.JBBox
 import com.intellij.ui.components.JBPanel
 import com.intellij.ui.components.JBLabel
@@ -17,11 +18,15 @@ import javax.swing.JButton
 import javax.swing.JComponent
 import javax.swing.SwingConstants
 
-class UserLoginComponent(private val onLoginSuccess: (User?) -> Unit) {
+class UserLoginComponent(private val onLoginSuccess: (User) -> Unit) {
     private val content = JBPanel<JBPanel<*>>().apply {
         add(JBBox.createVerticalBox().apply {
             val usernameField = JBTextField().apply { columns = 30 }
             val passwordField = JBPasswordField().apply { columns = 30 }
+            val errorMessageLabel = JBLabel().apply {
+                font = font.deriveFont(Font.BOLD)
+                foreground = JBColor.RED
+            }
             val loginButton = JButton("Login")
 
             add(JBLabel("~ Login ~").apply {
@@ -55,13 +60,20 @@ class UserLoginComponent(private val onLoginSuccess: (User?) -> Unit) {
             })
 
             add(JBPanel<JBPanel<*>>(BorderLayout()).apply {
+                add(errorMessageLabel, BorderLayout.NORTH)
                 add(loginButton, BorderLayout.CENTER)
             })
 
             add(Box.createVerticalStrut(10))
 
             loginButton.addActionListener {
-                onLoginSuccess(UserService.login(usernameField.text, passwordField.text))
+                val user = UserService.login(usernameField.text, passwordField.text)
+                if (user != null) {
+                    onLoginSuccess(user)
+                }
+                else {
+                    errorMessageLabel.text = "Login failed. Please check if you entered valid credentials."
+                }
             }
         })
     }
