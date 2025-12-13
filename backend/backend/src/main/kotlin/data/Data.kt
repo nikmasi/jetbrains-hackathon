@@ -1,6 +1,9 @@
 package com.example.data
 
 import kotlinx.serialization.Serializable
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
+
 //import java.time.Instant
 
 @Serializable
@@ -25,12 +28,12 @@ data class MessageResponse(
 )
 
 @Serializable
-data class Project(
+data class Project @OptIn(ExperimentalTime::class) constructor(
     val id:Int,
     val name:String,
-    val id_owner:Int
-    //val time_created:Instant,
-    //val time_last_change:Instant
+    val id_owner:Int,
+    val time_created: Instant,
+    val time_last_change:Instant
 )
 
 @Serializable

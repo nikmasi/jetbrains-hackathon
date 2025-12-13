@@ -38,5 +38,10 @@ sealed class Destinations(val name:String, val route:String,val icon:ImageVector
         route="AccountScreen",
         icon = Icons.Default.FavoriteBorder
     )
+    object FirstScreen:Destinations(
+        name="FirstScreen",
+        route="FirstScreen",
+        icon = Icons.Default.FavoriteBorder
+    )
     //AccountScreen
 }

@@ -20,6 +20,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.tasko.screens.Destinations
 import com.example.tasko.screens.auth.AccountScreen
+import com.example.tasko.screens.auth.FirstScreen
 import com.example.tasko.screens.auth.LoginScreen
 import com.example.tasko.screens.auth.Project
 import com.example.tasko.screens.auth.ProjectScreen
@@ -66,7 +67,7 @@ fun TaskoApp() {
 
         NavHost(
             navController = navController,
-            startDestination = Destinations.LoginScreen.route
+            startDestination = Destinations.FirstScreen.route
         ) {
             composable(route = Destinations.LoginScreen.route){
                 LoginScreen(navController=navController, myViewModel = myViewModel)
@@ -108,6 +109,11 @@ fun TaskoApp() {
                         println("Logout clicked")
                     },
                     myViewModel = myViewModel
+                )
+            }
+            composable(route= Destinations.FirstScreen.route){
+                FirstScreen(
+                    navController,myViewModel
                 )
             }
         }

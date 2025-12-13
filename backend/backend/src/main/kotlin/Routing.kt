@@ -16,6 +16,8 @@ import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 
+val openAiService = OpenAiService(apiKey = "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")
+
 fun Application.configureRouting() {
     val databaseService = DatabaseService(
         dbUrl = "jdbc:mysql://localhost:3306/tasko_database?useSSL=false&allowPublicKeyRetrieval=true",
@@ -61,6 +63,12 @@ fun Application.configureRouting() {
                 e.printStackTrace()
                 call.respond(HttpStatusCode.BadRequest, MessageResponse("Failed to log in Korisnik"))
             }
+        }
+        post("/chat") {
+            val request = call.receive<Map<String, String>>() // očekuje JSON {"prompt": "tvoj tekst"}
+            val prompt = request["prompt"] ?: ""
+            val response = openAiService.sendMessage(prompt)
+            call.respond(mapOf("response" to response))
         }
 
     }
