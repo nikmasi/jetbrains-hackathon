@@ -12,11 +12,13 @@ import org.delite.alt.ctrl.taskoplugin.services.TaskService
 import org.jetbrains.kotlin.idea.gradleTooling.get
 import com.intellij.openapi.ui.Messages
 import org.delite.alt.ctrl.taskoplugin.models.TaskList
+import java.awt.BorderLayout
 import javax.swing.BoxLayout
 import javax.swing.JButton
 import javax.swing.JPanel
 import java.awt.event.ItemEvent
 import javax.swing.Box
+import java.awt.Dimension
 
 class BoardComponent(val project: Project) {
     private val content = JBPanel<JBPanel<*>>()
@@ -29,8 +31,9 @@ class BoardComponent(val project: Project) {
         content.removeAll()
 
         content.add(JBBox.createVerticalBox().apply {
-            val taskLists = TaskListService.getTaskListsByProject(1)
+            val taskLists = TaskListService.getTaskListsByProject(1).sortedBy { it.position }
             val taskListSwitcher = ComboBox(taskLists.map { it.name }.toTypedArray())
+            taskListSwitcher.selectedIndex = taskLists.indexOfFirst { it.id == taskListIdx }
 
             taskListSwitcher.addItemListener { e ->
                 if (e.stateChange == ItemEvent.SELECTED) {
@@ -41,13 +44,33 @@ class BoardComponent(val project: Project) {
 
             add(JPanel().apply {
                 add(taskListSwitcher)
-                add(JButton("+").apply {
+                add(JButton("Add Task List").apply {
                     addActionListener {
-                        val ime: String = Messages.showInputDialog(project, "Enter name of the list!", "Name", Messages.getQuestionIcon()) ?: "ERROR"
-                        /* TODO: Dodati logiku dodavanja */
+                        val ime: String? = Messages.showInputDialog(project, "Enter name of the list!", "Name", Messages.getQuestionIcon())
+                        if (ime != null) {
+                            TaskListService.addTaskList(1, ime)
+                            refreshUI(taskListIdx)
+                        }
+                        else {
+                            Messages.showMessageDialog(project, "You did not enter valid name!", "Error!", Messages.getInformationIcon())
+                        }
                     }
                 })
             })
+
+            add(JBBox.createHorizontalBox().apply {
+                add(JButton("Create Task").apply {
+                    alignmentX = JPanel.CENTER_ALIGNMENT
+                    maximumSize = Dimension(Int.MAX_VALUE, preferredSize.height)
+                })
+
+                add(JButton("TODOs to Tasks").apply {
+                    alignmentX = JPanel.CENTER_ALIGNMENT
+                    maximumSize = Dimension(Int.MAX_VALUE, preferredSize.height)
+                })
+            })
+
+            add(Box.createVerticalStrut(10))
 
             add(JBBox.createVerticalBox().apply {
                 for (t in TaskService.getTasks(taskListIdx)) {
