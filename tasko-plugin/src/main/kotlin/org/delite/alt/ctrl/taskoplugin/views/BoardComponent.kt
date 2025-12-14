@@ -1,5 +1,6 @@
 package org.delite.alt.ctrl.taskoplugin.views
 
+import com.intellij.openapi.application.ApplicationManager
 import javax.swing.Timer
 import com.intellij.openapi.project.Project
 import com.intellij.ui.components.JBBox
@@ -8,8 +9,10 @@ import com.intellij.openapi.ui.ComboBox
 import org.delite.alt.ctrl.taskoplugin.services.TaskListService
 import org.delite.alt.ctrl.taskoplugin.services.TaskService
 import com.intellij.openapi.ui.Messages
+import com.intellij.openapi.wm.ToolWindow
 import org.delite.alt.ctrl.taskoplugin.services.ProjectService
 import org.delite.alt.ctrl.taskoplugin.services.TaskoLoginStateService
+import org.delite.alt.ctrl.taskoplugin.utilities.CommentsToTasks
 import java.awt.BorderLayout
 import java.awt.Component.LEFT_ALIGNMENT
 import javax.swing.JButton
@@ -30,6 +33,7 @@ class BoardComponent(val project: Project, val onLogout: () -> Unit) {
     }
 
     fun refreshUI(taskListIdx: Int) {
+        TaskoLoginStateService.getInstance().state.taskListIdx = taskListIdx
         content.removeAll()
 
         content.add(JBBox.createVerticalBox().apply {
@@ -94,6 +98,19 @@ class BoardComponent(val project: Project, val onLogout: () -> Unit) {
                 add(JButton("TODOs to Tasks").apply {
                     alignmentX = JPanel.CENTER_ALIGNMENT
                     maximumSize = Dimension(Int.MAX_VALUE, preferredSize.height)
+
+                    addActionListener {
+                        ApplicationManager.getApplication().executeOnPooledThread {
+                            ApplicationManager.getApplication().runReadAction {
+                                val ctt = CommentsToTasks()
+                                ctt.convertTodoToTasks(taskListIdx, ctt.getActiveKtFile(project)!!)
+
+                                ApplicationManager.getApplication().invokeLater {
+                                    refreshUI(taskListIdx)
+                                }
+                            }
+                        }
+                    }
                 })
             })
 

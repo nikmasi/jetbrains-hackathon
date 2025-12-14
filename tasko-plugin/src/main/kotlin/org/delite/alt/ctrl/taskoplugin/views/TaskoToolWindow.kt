@@ -38,6 +38,7 @@ class TaskoToolWindow : ToolWindowFactory {
         fun onLogout() {
             TaskoLoginStateService.getInstance().state.username = ""
             TaskoLoginStateService.getInstance().state.password = ""
+            TaskoLoginStateService.getInstance().state.taskListIdx = -1
             refreshUI()
         }
 
@@ -57,7 +58,7 @@ class TaskoToolWindow : ToolWindowFactory {
                 else {
                     add(JBScrollPane(JBBox.createVerticalBox().apply {
                         alignmentY = Component.TOP_ALIGNMENT
-                        add(BoardComponent(project, ::onLogout).getContent().apply { maximumSize = preferredSize })
+                        add(BoardComponent(project, ::onLogout).getContent().apply { })
                     }), BorderLayout.CENTER)
                 }
             }
