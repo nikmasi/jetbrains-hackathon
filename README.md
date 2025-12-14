@@ -24,6 +24,7 @@ It combines an Android Kanban app with a JetBrains IDE plugin and leverages AI-p
 
 🧠 AI suggestions for task planning and optimization
 
+## Screenshots
 
 
 
