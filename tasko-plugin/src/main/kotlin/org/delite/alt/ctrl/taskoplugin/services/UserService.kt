@@ -50,6 +50,18 @@ object UserService {
     }
 
     fun register(firstName: String, lastName: String, username: String, emailAddress: String, password: String): Boolean {
-        return false
+        val response = Http.post(
+            "${apiURL}/signUp",
+            buildJsonObject {
+                put("first_name", firstName)
+                put("last_name", lastName)
+                put("username", username)
+                put("email_address", emailAddress)
+                put("hashed_password", password)
+            }
+        )
+
+        val message: String = response["message"]?.jsonPrimitive?.content ?: "FALSE"
+        return (message == "TRUE")
     }
 }

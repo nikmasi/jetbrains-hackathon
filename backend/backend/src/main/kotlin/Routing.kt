@@ -37,6 +37,7 @@ fun Application.configureRouting() {
                 val korisnik = call.receive<User>()
 
                 repo?.createUser(korisnik)
+                call.respond(MessageResponse("TRUE"))
             } catch (e: Exception) {
                 e.printStackTrace()
                 call.respond(HttpStatusCode.BadRequest, MessageResponse("Failed to insert Korisnik"))
