@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,6 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.tasko.data.retrofit.models.TaskLists
+import com.example.tasko.viewModels.MyViewModel
 
 data class Project(
     val title: String,
@@ -32,7 +35,12 @@ data class Project(
 )
 
 @Composable
-fun ProjectScreen(projects: List<Project>, onAddProject: () -> Unit, onAddItem: (Project) -> Unit, onSettingsClick : ()->Unit,onAccountClick : ()->Unit) {
+fun ProjectScreen(projects: List<Project>, onAddProject: () -> Unit, onAddItem: (Project) -> Unit, onSettingsClick : ()->Unit,onAccountClick : ()->Unit,projectName:String,myViewModel: MyViewModel) {
+
+    val uiState by myViewModel.uiStateTasksListList.collectAsState()
+    val tasksList = uiState.listTasks
+    val tasksItems = tasksList?.taskst ?: emptyList()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -48,7 +56,7 @@ fun ProjectScreen(projects: List<Project>, onAddProject: () -> Unit, onAddItem: 
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "Projects",
+                text = "$projectName",
                 color = Color.White,
                 fontSize = 24.sp
             )
@@ -66,8 +74,8 @@ fun ProjectScreen(projects: List<Project>, onAddProject: () -> Unit, onAddItem: 
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(projects) { project ->
-                ProjectCard(project = project, onAddItem = { onAddItem(project) })
+            items(tasksItems) { project ->
+                ProjectCard(project = project, onAddItem = {  })
             }
             item {
                 EmptyProjectCard(onClick = { onAddProject() })
@@ -77,7 +85,7 @@ fun ProjectScreen(projects: List<Project>, onAddProject: () -> Unit, onAddItem: 
 }
 
 @Composable
-fun ProjectCard(project: Project, onAddItem: () -> Unit) {
+fun ProjectCard(project: TaskLists, onAddItem: () -> Unit) {
     var isAddingTask by remember { mutableStateOf(false) }
     var taskText by remember { mutableStateOf("") }
 
@@ -96,12 +104,12 @@ fun ProjectCard(project: Project, onAddItem: () -> Unit) {
         ) {
             Column {
                 Text(
-                    text = project.title,
+                    text = project.name,
                     color = Color.White,
                     fontSize = 18.sp
                 )
                 Text(
-                    text = project.description,
+                    text = project.id_project.toString(),
                     color = Color.LightGray,
                     fontSize = 14.sp
                 )

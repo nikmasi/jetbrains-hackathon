@@ -20,7 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.tasko.data.retrofit.models.Project
+import com.example.tasko.screens.Destinations
 import com.example.tasko.viewModels.MyViewModel
 
 data class ProjectL(
@@ -32,7 +34,8 @@ data class ProjectL(
 fun ProjectListScreen(
     projects2: List<ProjectL>,
     onProjectClick: (Project) -> Unit,
-    myViewModel: MyViewModel
+    myViewModel: MyViewModel,
+    navController: NavController
 ) {
     val uiState by myViewModel.uiStateProjectsList.collectAsState()
     var showAddForm by remember { mutableStateOf(false) }
@@ -107,7 +110,7 @@ fun ProjectListScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(projectItems) { project ->
-                        ProjectListCard(project = project, onClick = { onProjectClick(project) })
+                        ProjectListCard(project = project, onClick = { onProjectClick(project) },navController,myViewModel)
                     }
                 }
             }
@@ -116,13 +119,15 @@ fun ProjectListScreen(
 }
 
 @Composable
-fun ProjectListCard(project: Project, onClick: (String) -> Unit) {
+fun ProjectListCard(project: Project, onClick: (String) -> Unit,navController: NavController,myViewModel: MyViewModel) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(
                 onClick =
-                    { onClick(project.name) },
+                    {
+                        myViewModel.fetchAllTasksListProject(project.name)
+                        navController.navigate(Destinations.ProjectScreen.route+"/"+project.name) },
                 indication = LocalIndication.current,
                 interactionSource = remember { MutableInteractionSource() }
             ),

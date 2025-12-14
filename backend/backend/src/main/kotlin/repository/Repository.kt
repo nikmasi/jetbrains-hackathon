@@ -302,7 +302,7 @@ class Repository(private val connection: Connection): RepoInterface {
             statement.setString(1, user.username)
             val rs = statement.executeQuery()
             while (rs.next()) {
-                /*
+
                 results.add(
                     Project2(
                         id = rs.getInt("id"),
@@ -313,7 +313,7 @@ class Repository(private val connection: Connection): RepoInterface {
                         //time_last_change = Clock.System.now()
                     )
                 )
-                 */
+
             }
             rs.close()
         } catch (e: SQLException) {

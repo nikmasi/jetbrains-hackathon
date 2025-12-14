@@ -105,6 +105,7 @@ fun Application.configureRouting() {
                 val pr = call.receive<NewProject>()
 
                 val result = repo?.selectAllTaskListsOfProject(pr.project)
+                println(result)
                 call.respond(TasksListList(result))
             } catch (e: Exception) {
                 e.printStackTrace()
