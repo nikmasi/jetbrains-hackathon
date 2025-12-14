@@ -23,6 +23,8 @@ import com.example.tasko.screens.auth.AccountScreen
 import com.example.tasko.screens.auth.FirstScreen
 import com.example.tasko.screens.auth.LoginScreen
 import com.example.tasko.screens.auth.Project
+import com.example.tasko.screens.auth.ProjectL
+import com.example.tasko.screens.auth.ProjectListScreen
 import com.example.tasko.screens.auth.ProjectScreen
 import com.example.tasko.screens.auth.ProjectSettingsScreen
 import com.example.tasko.screens.auth.RegistrationScreen
@@ -60,6 +62,12 @@ fun TaskoApp() {
         Project("TODO", "This is project A"),
         Project("IN PROCESS", "This is project B"),
         Project("DONE", "This is project C")
+    )
+
+    val sampleProjects2 = listOf(
+        ProjectL("Project A", "Description A"),
+        ProjectL("Project B", "Description B"),
+        ProjectL("Project C", "Description C")
     )
     val members = listOf("Ja","Mihajlo","Jaroslav")
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -114,6 +122,16 @@ fun TaskoApp() {
             composable(route= Destinations.FirstScreen.route){
                 FirstScreen(
                     navController,myViewModel
+                )
+            }
+            composable(route = Destinations.ProjectListScreen.route){
+                ProjectListScreen(
+                    onProjectClick = { project ->
+                        // npr. navigacija na detalje projekta
+                        navController.navigate(Destinations.ProjectScreen.route)
+                    },
+                    projects2 = sampleProjects2,
+                    myViewModel = myViewModel
                 )
             }
         }

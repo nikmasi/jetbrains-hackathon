@@ -53,7 +53,7 @@ fun LoginScreen(navController: NavController, myViewModel: MyViewModel){
     // Ako je uspešan login, navigiraj
     if (uiState.isLoggedIn) {
         LaunchedEffect(Unit) {
-            navController.navigate(Destinations.ProjectScreen.route) {
+            navController.navigate(Destinations.ProjectListScreen.route) {
                 popUpTo(Destinations.LoginScreen.route) { inclusive = true }
             }
         }

@@ -82,4 +82,5 @@ dependencies {
     ksp(libs.androidx.room.compiler) // add the plugin also!
 
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
 }

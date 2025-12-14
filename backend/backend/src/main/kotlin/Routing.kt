@@ -1,14 +1,14 @@
 package com.example
 
-import com.asyncapi.kotlinasyncapi.context.service.AsyncApiExtension
-import com.asyncapi.kotlinasyncapi.ktor.AsyncApiPlugin
+import com.example.data.CreateProjectRequest
 import com.example.data.MessageResponse
+import com.example.data.NewProject
+import com.example.data.ProjectList
 import com.example.data.User
 import com.example.data.UserRequest
 import com.example.repository.Repository
 import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.request.receive
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -62,6 +62,36 @@ fun Application.configureRouting() {
             catch (e: Exception){
                 e.printStackTrace()
                 call.respond(HttpStatusCode.BadRequest, MessageResponse("Failed to log in Korisnik"))
+            }
+        }
+
+        post("/createProject"){
+            try {
+                val conn = databaseService.getDatabaseConnection()
+                val repo = conn?.let { Repository(it) }
+                val pr = call.receive<NewProject>()
+
+                repo?.createProject(pr)
+
+                call.respond(HttpStatusCode.OK, MessageResponse("Inserted Project Successfully"))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                call.respond(HttpStatusCode.BadRequest, MessageResponse("Failed "))
+            }
+        }
+        post("/selectProjectUser"){
+            try {
+                val conn = databaseService.getDatabaseConnection()
+                val repo = conn?.let { Repository(it) }
+                val pr = call.receive<UserRequest>()
+
+                val result = repo?.selectProjectsOfUser(User("","",pr.username,"",""))
+
+                println(ProjectList(result))
+                call.respond(ProjectList(result))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                call.respond(HttpStatusCode.BadRequest, MessageResponse("Failed "))
             }
         }
         post("/chat") {

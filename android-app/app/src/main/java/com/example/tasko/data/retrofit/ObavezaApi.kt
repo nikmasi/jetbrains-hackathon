@@ -1,10 +1,12 @@
 package com.example.tasko.data.retrofit
 
 import com.example.tasko.data.retrofit.models.MessageResponse
+import com.example.tasko.data.retrofit.models.NewProject
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import com.example.tasko.data.retrofit.models.Obaveza
+import com.example.tasko.data.retrofit.models.ProjectList
 import com.example.tasko.data.retrofit.models.User
 import com.example.tasko.data.retrofit.models.UserRequest
 
@@ -23,5 +25,11 @@ interface ObavezaApi {
 
     @POST("signUp")
     suspend fun signUp(@Body user: User): MessageResponse
+
+    @POST("selectProjectUser")
+    suspend fun selectProjectUser(@Body userReq: UserRequest): ProjectList
+
+    @POST("createProject")
+    suspend fun createProject(@Body newPr: NewProject): MessageResponse
 
 }
