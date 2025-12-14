@@ -1,17 +1,26 @@
 package com.example.repository
 
 import com.example.closeResources
+import com.example.data.CreateProjectRequest
+import com.example.data.NewProject
 import com.example.data.Project
+import com.example.data.Project2
 import com.example.data.ProjectInvites
 import com.example.data.ProjectUsers
 import com.example.data.Task
 import com.example.data.TaskLists
 import com.example.data.User
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.toJavaInstant
+import kotlinx.datetime.toKotlinInstant
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
 import java.sql.Statement
+import java.sql.Timestamp
+import kotlin.time.ExperimentalTime
 
 class Repository(private val connection: Connection): RepoInterface {
     override fun createUser(user: User): Boolean {
@@ -50,37 +59,58 @@ class Repository(private val connection: Connection): RepoInterface {
         return false
     }
 
-    override fun createProject(project: Project): Boolean {
-        val query = """
-            INSERT INTO projects (name, id_owner)
-            VALUES (?, ?)
-        """
-
+    override fun createProject(project: NewProject): Boolean {
         var statement: PreparedStatement? = null
         var resultSet: ResultSet? = null
 
         try {
-            statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)
-            if (statement == null) {
-                println("Prepare statement failed: statement is null")
+            // 1️⃣ Prvo dohvatimo ID korisnika prema username
+            val userQuery = "SELECT id FROM users WHERE username = ?"
+            statement = connection.prepareStatement(userQuery)
+            statement.setString(1, project.username)
+            resultSet = statement.executeQuery()
+
+            if (!resultSet.next()) {
+                println("User not found: ${project.username}")
                 return false
             }
 
-            statement.setString(1, project.name)
-            statement.setInt(2, project.id_owner)
+            val userId = resultSet.getInt("id")
+            resultSet.close()
+            statement.close()
 
-            statement.executeUpdate()
+            // 2️⃣ Sada ubacujemo projekat sa id_owner = userId
+            val insertQuery = """
+            INSERT INTO projects (name, id_owner, time_created, time_last_change)
+            VALUES (?, ?, ?, ?)
+        """
+            statement = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)
 
+            val now = Clock.System.now() // trenutni timestamp
+
+            statement.setString(1, project.project) // ime projekta
+            statement.setInt(2, userId) // vlasnik projekta
+            statement.setTimestamp(3, Timestamp.from(now.toJavaInstant()))
+            statement.setTimestamp(4, Timestamp.from(now.toJavaInstant()))
+
+            val rowsInserted = statement.executeUpdate()
             resultSet = statement.generatedKeys
-            if (resultSet?.next() == true) {
-                // Generated ID present
+
+            if (rowsInserted > 0 && resultSet?.next() == true) {
+                val generatedId = resultSet.getInt(1)
+                println("Project created with ID: $generatedId")
+
+                // Dodaj korisnika u project_users
+                createProjectUsers(ProjectUsers(id_project = generatedId, id_user = userId))
                 return true
             }
+
         } catch (e: SQLException) {
             e.printStackTrace()
         } finally {
-            closeResources(connection, statement, null)
+            closeResources(connection, statement, resultSet)
         }
+
         return false
     }
 
@@ -249,29 +279,34 @@ class Repository(private val connection: Connection): RepoInterface {
         }
     }
 
-    override fun selectProjectsOfUser(user: User): List<Project> {
+    @OptIn(ExperimentalTime::class)
+    override fun selectProjectsOfUser(user: User): List<Project2> {
         val query = """
-            SELECT DISTINCT p.id, p.name, p.id_owner
-            FROM projects p
-            LEFT JOIN project_users pu ON p.id = pu.id_project
-            LEFT JOIN users u ON (pu.id_user = u.id OR p.id_owner = u.id)
-            WHERE u.username = ?
-        """
+        SELECT DISTINCT p.id, p.name, p.id_owner, p.time_created, p.time_last_change
+        FROM projects p
+        LEFT JOIN project_users pu ON p.id = pu.id_project
+        LEFT JOIN users u ON (pu.id_user = u.id OR p.id_owner = u.id)
+        WHERE u.username = ?
+    """
 
-        val results = mutableListOf<Project>()
+        val results = mutableListOf<Project2>()
         var statement: PreparedStatement? = null
 
         try {
+
             statement = connection.prepareStatement(query)
             statement.setString(1, user.username)
             val rs = statement.executeQuery()
             while (rs.next()) {
                 /*
                 results.add(
-                    Project(
+                    Project2(
                         id = rs.getInt("id"),
                         name = rs.getString("name"),
-                        id_owner = rs.getInt("id_owner")
+                        id_owner = rs.getInt("id_owner"),
+
+                        //time_created = Clock.System.now(),
+                        //time_last_change = Clock.System.now()
                     )
                 )
                  */

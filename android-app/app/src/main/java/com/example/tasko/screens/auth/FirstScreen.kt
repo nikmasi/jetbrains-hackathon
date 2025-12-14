@@ -33,9 +33,9 @@ fun FirstScreen(navController: NavController, myViewModel: MyViewModel) {
     )
 
     LaunchedEffect(Unit) {
-        delay(1500L)
+        delay(1000L)
         if (uiState.isLoggedIn) {
-            navController.navigate(Destinations.ProjectScreen.route) {
+            navController.navigate(Destinations.ProjectListScreen.route) {
                 popUpTo(Destinations.LoginScreen.route) { inclusive = true }
             }
         } else {

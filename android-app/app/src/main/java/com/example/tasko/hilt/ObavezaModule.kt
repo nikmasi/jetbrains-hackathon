@@ -27,6 +27,7 @@ object ObavezaModule {
             addInterceptor(httpLoggingInterceptor)
         }.build()
 
+
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)

@@ -4,7 +4,7 @@ import com.example.data.*
 
 interface RepoInterface {
     fun createUser(user: User): Boolean
-    fun createProject(project: Project): Boolean
+    fun createProject(project: NewProject): Boolean
     fun createProjectUsers(projectUsers: ProjectUsers): Boolean
     fun createProjectInvites(projectInvites: ProjectInvites): Boolean
     fun createTaskList(taskLists: TaskLists): Boolean
@@ -12,7 +12,7 @@ interface RepoInterface {
 
 
     fun selectUser(username:String, password:String): User?
-    fun selectProjectsOfUser(user: User): List<Project>
+    fun selectProjectsOfUser(user: User): List<Project2>
     fun selectProjectUsersOfProject(project: Project): List<User>
     fun selectProjectInvitesOfProject(project: Project): List<User>
     fun selectAllTaskListsOfProject(project: Project): List<TaskLists>

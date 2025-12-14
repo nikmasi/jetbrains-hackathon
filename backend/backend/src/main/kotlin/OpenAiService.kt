@@ -23,6 +23,7 @@ class OpenAiService(private val apiKey: String) {
                 prettyPrint = true
                 isLenient = true
                 ignoreUnknownKeys = true
+                encodeDefaults = true
             })
         }
     }

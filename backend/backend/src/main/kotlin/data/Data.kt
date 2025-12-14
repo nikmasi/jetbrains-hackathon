@@ -2,7 +2,7 @@ package com.example.data
 
 import kotlinx.serialization.Serializable
 import kotlin.time.ExperimentalTime
-import kotlin.time.Instant
+import kotlinx.datetime.Instant
 
 //import java.time.Instant
 
@@ -34,6 +34,31 @@ data class Project @OptIn(ExperimentalTime::class) constructor(
     val id_owner:Int,
     val time_created: Instant,
     val time_last_change:Instant
+)
+
+@Serializable
+data class Project2 (
+    val id:Int,
+    val name:String,
+    val id_owner:Int
+)
+
+
+@Serializable
+data class ProjectList(
+    val projects: List<Project2>?
+)
+
+@Serializable
+data class CreateProjectRequest(
+    val name: String,
+    val id_owner: Int
+)
+
+@Serializable
+data class NewProject(
+    val project: String,
+    val username: String
 )
 
 @Serializable
