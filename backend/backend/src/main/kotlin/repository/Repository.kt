@@ -266,6 +266,7 @@ class Repository(private val connection: Connection): RepoInterface {
             statement.setString(1, user.username)
             val rs = statement.executeQuery()
             while (rs.next()) {
+                /*
                 results.add(
                     Project(
                         id = rs.getInt("id"),
@@ -273,6 +274,7 @@ class Repository(private val connection: Connection): RepoInterface {
                         id_owner = rs.getInt("id_owner")
                     )
                 )
+                 */
             }
             rs.close()
         } catch (e: SQLException) {

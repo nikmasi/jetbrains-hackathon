@@ -26,6 +26,19 @@ dependencies {
         bundledPlugin("com.intellij.java")
         bundledPlugin("org.jetbrains.kotlin")
     }
+
+    implementation("io.ktor:ktor-client-core:2.3.7") {
+        exclude(group = "org.slf4j")
+    }
+    implementation("io.ktor:ktor-client-cio:2.3.7") {
+        exclude(group = "org.slf4j")
+    }
+    implementation("io.ktor:ktor-client-content-negotiation:2.3.7") {
+        exclude(group = "org.slf4j")
+    }
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.7") {
+        exclude(group = "org.slf4j")
+    }
 }
 
 intellijPlatform {

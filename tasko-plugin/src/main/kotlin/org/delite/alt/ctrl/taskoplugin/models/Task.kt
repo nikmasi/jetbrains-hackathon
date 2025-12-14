@@ -8,7 +8,8 @@ data class Task(
     val title: String,
     val body_text : String,
     val position: Int,
-    var checked: Boolean,
+    val checked: Boolean,
     val time_created: LocalDateTime,
-    var time_changed: LocalDateTime,
+    val time_changed: LocalDateTime,
+    val id_user_created: Int
 )

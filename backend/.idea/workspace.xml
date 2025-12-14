@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="8d158a49-3a72-49fa-990b-49b48519dabe" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../tasko-plugin/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../tasko-plugin/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tasko-plugin/.intellijPlatform/self-update.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../tasko-plugin/.intellijPlatform/self-update.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tasko-plugin/src/main/kotlin/org/delite/alt/ctrl/taskoplugin/common/Constants.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tasko-plugin/src/main/kotlin/org/delite/alt/ctrl/taskoplugin/models/ProjectUsers.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../tasko-plugin/src/main/kotlin/org/delite/alt/ctrl/taskoplugin/models/ProjectUsers.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tasko-plugin/src/main/kotlin/org/delite/alt/ctrl/taskoplugin/models/Task.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../tasko-plugin/src/main/kotlin/org/delite/alt/ctrl/taskoplugin/models/Task.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tasko-plugin/src/main/kotlin/org/delite/alt/ctrl/taskoplugin/models/TaskList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../tasko-plugin/src/main/kotlin/org/delite/alt/ctrl/taskoplugin/models/TaskList.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tasko-plugin/src/main/kotlin/org/delite/alt/ctrl/taskoplugin/models/User.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../tasko-plugin/src/main/kotlin/org/delite/alt/ctrl/taskoplugin/models/User.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tasko-plugin/src/main/kotlin/org/delite/alt/ctrl/taskoplugin/services/TaskService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../tasko-plugin/src/main/kotlin/org/delite/alt/ctrl/taskoplugin/services/TaskService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tasko-plugin/src/main/kotlin/org/delite/alt/ctrl/taskoplugin/services/UserService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../tasko-plugin/src/main/kotlin/org/delite/alt/ctrl/taskoplugin/services/UserService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tasko-plugin/src/main/kotlin/org/delite/alt/ctrl/taskoplugin/views/BoardComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../tasko-plugin/src/main/kotlin/org/delite/alt/ctrl/taskoplugin/views/BoardComponent.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tasko-plugin/src/main/kotlin/org/delite/alt/ctrl/taskoplugin/views/TaskComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../tasko-plugin/src/main/kotlin/org/delite/alt/ctrl/taskoplugin/views/TaskComponent.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tasko-plugin/src/main/kotlin/org/delite/alt/ctrl/taskoplugin/views/TaskCreatorDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../tasko-plugin/src/main/kotlin/org/delite/alt/ctrl/taskoplugin/views/TaskCreatorDialog.kt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 8
+}]]></component>
+  <component name="ProjectId" id="36oUyGE8MEWxrKqG0EEGVRLgvhG" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Jaroslav/Desktop/jetbrains-hackathon/backend",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-cffe25b9f5b3-intellij.indexing.shared.core-IU-253.28294.334" />
+        <option value="bundled-js-predefined-d6986cc7102b-c7e53b3be11b-JavaScript-IU-253.28294.334" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8d158a49-3a72-49fa-990b-49b48519dabe" name="Changes" comment="" />
+      <created>1765672671669</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1765672671669</updated>
+      <workItem from="1765672673042" duration="5000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

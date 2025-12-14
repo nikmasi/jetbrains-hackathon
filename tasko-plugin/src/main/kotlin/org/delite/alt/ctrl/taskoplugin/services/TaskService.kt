@@ -13,7 +13,8 @@ object TaskService {
             position = 0,
             checked = true,
             time_created = LocalDateTime.now().minusDays(3),
-            time_changed = LocalDateTime.now().minusDays(3)
+            time_changed = LocalDateTime.now().minusDays(3),
+            id_user_created = 1
         ),
         Task(
             id = 2,
@@ -24,6 +25,7 @@ object TaskService {
             checked = true,
             time_created = LocalDateTime.now().minusDays(2),
             time_changed = LocalDateTime.now().minusDays(1),
+            id_user_created = 1
         ),
         Task(
             id = 3,
@@ -34,6 +36,7 @@ object TaskService {
             checked = false,
             time_created = LocalDateTime.now().minusDays(2),
             time_changed = LocalDateTime.now().minusDays(2),
+            id_user_created = 1
         ),
         Task(
             id = 4,
@@ -43,7 +46,8 @@ object TaskService {
             position = 0,
             checked = false,
             time_created = LocalDateTime.now().minusDays(1),
-            time_changed = LocalDateTime.now().minusDays(1)
+            time_changed = LocalDateTime.now().minusDays(1),
+            id_user_created = 1
         ),
         Task(
             id = 5,
@@ -54,6 +58,7 @@ object TaskService {
             checked = false,
             time_created = LocalDateTime.now().minusHours(20),
             time_changed = LocalDateTime.now().minusHours(5),
+            id_user_created = 1
         ),
         Task(
             id = 6,
@@ -64,10 +69,16 @@ object TaskService {
             checked = false,
             time_created = LocalDateTime.now().minusHours(10),
             time_changed = LocalDateTime.now().minusHours(10),
+            id_user_created = 1
         )
     )
 
     fun getTasks(idTaskList: Int): List<Task> {
         return tasks.filter { it.id_task_list == idTaskList }.sortedBy { it.position }
+    }
+
+    fun addTask(idTaskList: Int, taskTitle: String, bodyText: String) {
+        val nextPosition = tasks.filter { it.id_task_list == idTaskList }.maxOfOrNull { it.position }?.plus(1) ?: 0
+        tasks.addLast(Task(id=tasks.size + 1, idTaskList, taskTitle, bodyText, nextPosition, false, LocalDateTime.now(), LocalDateTime.now(), id_user_created = 1))
     }
 }

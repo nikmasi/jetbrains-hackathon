@@ -7,8 +7,7 @@ import com.intellij.ui.components.JBBox
 import com.intellij.ui.components.JBPanel
 import com.intellij.ui.components.JBScrollPane
 import com.intellij.ui.content.ContentFactory
-import org.delite.alt.ctrl.taskoplugin.models.User
-import com.intellij.openapi.ui.Messages
+import org.delite.alt.ctrl.taskoplugin.services.TaskoLoginStateService
 import java.awt.BorderLayout
 import java.awt.Component
 
@@ -30,7 +29,15 @@ class TaskoToolWindow : ToolWindowFactory {
 
         fun getContent(): JBPanel<JBPanel<*>> = content
 
-        fun onLoginSuccess(user: User) {
+        fun onLoginSuccess(username: String, password: String): Unit {
+            TaskoLoginStateService.getInstance().state.username = username
+            TaskoLoginStateService.getInstance().state.password = password
+            refreshUI()
+        }
+
+        fun onLogout() {
+            TaskoLoginStateService.getInstance().state.username = ""
+            TaskoLoginStateService.getInstance().state.password = ""
             refreshUI()
         }
 
@@ -40,7 +47,7 @@ class TaskoToolWindow : ToolWindowFactory {
             content.apply {
                 layout = BorderLayout()
 
-                if (false /* TODO: Check if already logged in! */) {
+                if (!TaskoLoginStateService.getInstance().state.loggedIn()) {
                     add(JBScrollPane(JBBox.createVerticalBox().apply {
                         alignmentY = Component.TOP_ALIGNMENT
                         add(UserLoginComponent(::onLoginSuccess).getContent().apply { maximumSize = preferredSize })
@@ -50,7 +57,7 @@ class TaskoToolWindow : ToolWindowFactory {
                 else {
                     add(JBScrollPane(JBBox.createVerticalBox().apply {
                         alignmentY = Component.TOP_ALIGNMENT
-                        add(BoardComponent(project).getContent().apply { maximumSize = preferredSize })
+                        add(BoardComponent(project, ::onLogout).getContent().apply { maximumSize = preferredSize })
                     }), BorderLayout.CENTER)
                 }
             }

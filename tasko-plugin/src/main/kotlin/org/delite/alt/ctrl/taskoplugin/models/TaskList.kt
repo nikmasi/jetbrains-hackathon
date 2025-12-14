@@ -7,5 +7,6 @@ data class TaskList (
     val id_project: Int,
     val name: String,
     val position: Int,
-    val time_created: LocalDateTime
+    val time_created: LocalDateTime,
+    val id_user_created: Int
 )
