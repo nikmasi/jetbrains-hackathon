@@ -398,37 +398,58 @@ class Repository(private val connection: Connection): RepoInterface {
         return results
     }
 
-    override fun selectAllTaskListsOfProject(project: String): List<TaskLists> {
-        val query = """
+    override fun selectAllTaskListsOfProject(projectName: String): List<TaskLists> {
+        val results = mutableListOf<TaskLists>()
+        var statement: PreparedStatement? = null
+        var resultSet: ResultSet? = null
+
+        try {
+            // 1️⃣ Nađi ID projekta po imenu
+            val projectQuery = """
+            SELECT id FROM projects WHERE name = ?
+        """
+            statement = connection.prepareStatement(projectQuery)
+            statement.setString(1, projectName)
+            resultSet = statement.executeQuery()
+
+            if (!resultSet.next()) {
+                println("Project not found: $projectName")
+                return emptyList()
+            }
+
+            val projectId = resultSet.getInt("id")
+
+            resultSet.close()
+            statement.close()
+
+            // 2️⃣ Dohvati task liste za taj projekat
+            val taskListQuery = """
             SELECT id, id_project, name, position, id_user_created
             FROM task_lists
             WHERE id_project = ?
             ORDER BY position
         """
 
-        val results = mutableListOf<TaskLists>()
-        var statement: PreparedStatement? = null
+            statement = connection.prepareStatement(taskListQuery)
+            statement.setInt(1, projectId)
+            resultSet = statement.executeQuery()
 
-        try {
-            statement = connection.prepareStatement(query)
-            statement.setInt(1, project.id)
-            val rs = statement.executeQuery()
-            while (rs.next()) {
+            while (resultSet.next()) {
                 results.add(
                     TaskLists(
-                        id = rs.getInt("id"),
-                        id_project = rs.getInt("id_project"),
-                        name = rs.getString("name"),
-                        position = rs.getInt("position"),
-                        id_user_created = rs.getInt("id_user_created")
+                        id = resultSet.getInt("id"),
+                        id_project = resultSet.getInt("id_project"),
+                        name = resultSet.getString("name"),
+                        position = resultSet.getInt("position"),
+                        id_user_created = resultSet.getInt("id_user_created")
                     )
                 )
             }
-            rs.close()
+
         } catch (e: SQLException) {
             e.printStackTrace()
         } finally {
-            closeResources(connection, statement, null)
+            closeResources(connection, statement, resultSet)
         }
 
         return results
