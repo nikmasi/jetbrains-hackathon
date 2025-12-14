@@ -40,6 +40,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -76,7 +77,7 @@ fun LoginScreen(navController: NavController, myViewModel: MyViewModel){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Login!",
+                text = "Login",
                 color = Color.White,
                 fontSize = 24.sp,
                 modifier = Modifier.padding(bottom = 24.dp)
@@ -98,16 +99,20 @@ fun LoginScreen(navController: NavController, myViewModel: MyViewModel){
                 onValueChange = { password = it },
                 label = { Text("Password", color = Color.White) },
                 singleLine = true,
-                visualTransformation =  VisualTransformation.None ,
                 trailingIcon = {
                     val image = if (passwordVisible)
                         Icons.Default.Add
                     else Icons.Default.Menu
 
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Icon(imageVector = image, contentDescription = "Toggle password visibility", tint = Color.LightGray)
+                        Icon(
+                            imageVector = image,
+                            contentDescription = "Toggle password visibility",
+                            tint = Color.LightGray
+                        )
                     }
                 },
+                visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 textStyle = TextStyle(color = Color.White),
                 modifier = Modifier.fillMaxWidth()
