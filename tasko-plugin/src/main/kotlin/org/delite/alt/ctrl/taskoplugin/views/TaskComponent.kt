@@ -26,14 +26,12 @@ class TaskComponent(val task: Task) {
         add(JBBox.createVerticalBox().apply {
             add(JBLabel(task.title).apply { font = font.deriveFont(Font.BOLD, 16f) })
 
-            // add(JSeparator(SwingConstants.HORIZONTAL))
+            add(JSeparator(SwingConstants.HORIZONTAL))
 
             if (task.body_text.length > 100)
                 add(JBLabel("${task.body_text.take(100)}..."))
             else
                 add(JBLabel(task.body_text))
-
-            add(JButton("Edit Task"))
         })
     }
 

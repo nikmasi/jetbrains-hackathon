@@ -1,84 +1,38 @@
 package org.delite.alt.ctrl.taskoplugin.services
 
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.decodeFromJsonElement
+import kotlinx.serialization.json.put
 import org.delite.alt.ctrl.taskoplugin.models.Task
 import java.time.LocalDateTime
 
 object TaskService {
-    private val tasks = mutableListOf(
-        Task(
-            id = 1,
-            id_task_list = 1,
-            title = "Set up project",
-            body_text = "Create a new Kotlin project and configure Gradle dependencies.",
-            position = 0,
-            checked = true,
-            time_created = LocalDateTime.now().minusDays(3),
-            time_changed = LocalDateTime.now().minusDays(3),
-            id_user_created = 1
-        ),
-        Task(
-            id = 2,
-            id_task_list = 1,
-            title = "Design data models",
-            body_text = "Define data classes for Task, TaskList, and User.",
-            position = 1,
-            checked = true,
-            time_created = LocalDateTime.now().minusDays(2),
-            time_changed = LocalDateTime.now().minusDays(1),
-            id_user_created = 1
-        ),
-        Task(
-            id = 3,
-            id_task_list = 1,
-            title = "Implement repository layer",
-            body_text = "Create repository interfaces and mock implementations.",
-            position = 2,
-            checked = false,
-            time_created = LocalDateTime.now().minusDays(2),
-            time_changed = LocalDateTime.now().minusDays(2),
-            id_user_created = 1
-        ),
-        Task(
-            id = 4,
-            id_task_list = 2,
-            title = "Build UI screen",
-            body_text = "Create the task list screen using Jetpack Compose.",
-            position = 0,
-            checked = false,
-            time_created = LocalDateTime.now().minusDays(1),
-            time_changed = LocalDateTime.now().minusDays(1),
-            id_user_created = 1
-        ),
-        Task(
-            id = 5,
-            id_task_list = 2,
-            title = "Add click handling",
-            body_text = "Handle task check/uncheck and item clicks.",
-            position = 1,
-            checked = false,
-            time_created = LocalDateTime.now().minusHours(20),
-            time_changed = LocalDateTime.now().minusHours(5),
-            id_user_created = 1
-        ),
-        Task(
-            id = 6,
-            id_task_list = 3,
-            title = "Write unit tests",
-            body_text = "Add unit tests for TaskService and repositories.",
-            position = 0,
-            checked = false,
-            time_created = LocalDateTime.now().minusHours(10),
-            time_changed = LocalDateTime.now().minusHours(10),
-            id_user_created = 1
-        )
-    )
+    val apiURL: String = "http://localhost:8080"
 
     fun getTasks(idTaskList: Int): List<Task> {
-        return tasks.filter { it.id_task_list == idTaskList }.sortedBy { it.position }
+        val response = Http.post(
+            "${apiURL}/selectAllTasksOfTaskLists",
+            buildJsonObject {
+                put("name", idTaskList)
+            }
+        )
+        println(idTaskList.toString() + " " + response)
+        return Json.decodeFromJsonElement<List<Task>>(response["tasks"] ?: return emptyList())
     }
 
     fun addTask(idTaskList: Int, taskTitle: String, bodyText: String) {
-        val nextPosition = tasks.filter { it.id_task_list == idTaskList }.maxOfOrNull { it.position }?.plus(1) ?: 0
-        tasks.addLast(Task(id=tasks.size + 1, idTaskList, taskTitle, bodyText, nextPosition, false, LocalDateTime.now(), LocalDateTime.now(), id_user_created = 1))
+        val response = Http.post(
+            "${apiURL}/createTask",
+            buildJsonObject {
+                put("id", 0)
+                put("id_task_list", idTaskList)
+                put("title", taskTitle)
+                put("body_text", bodyText)
+                put("position", 0)
+                put("checked", 0)
+                put("id_user_created", 0)
+            }
+        )
     }
 }

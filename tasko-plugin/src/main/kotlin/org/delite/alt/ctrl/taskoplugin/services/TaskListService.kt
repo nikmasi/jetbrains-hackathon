@@ -10,6 +10,8 @@ import org.delite.alt.ctrl.taskoplugin.services.UserService.apiURL
 import java.time.LocalDateTime
 
 object TaskListService {
+    val apiURL: String = "http://localhost:8080"
+
     fun getTaskListsByProject(username: String, projectName: String): List<TaskList> {
         val response = Http.post(
             "${apiURL}/selectAllTasksProject",
