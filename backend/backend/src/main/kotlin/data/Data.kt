@@ -50,6 +50,11 @@ data class ProjectList(
 )
 
 @Serializable
+data class TasksListList(
+    val taskst: List<TaskLists>?
+)
+
+@Serializable
 data class CreateProjectRequest(
     val name: String,
     val id_owner: Int

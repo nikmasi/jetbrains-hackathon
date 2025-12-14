@@ -3,7 +3,9 @@ package com.example
 import com.example.data.CreateProjectRequest
 import com.example.data.MessageResponse
 import com.example.data.NewProject
+import com.example.data.Project
 import com.example.data.ProjectList
+import com.example.data.TasksListList
 import com.example.data.User
 import com.example.data.UserRequest
 import com.example.repository.Repository
@@ -37,6 +39,7 @@ fun Application.configureRouting() {
                 val korisnik = call.receive<User>()
 
                 repo?.createUser(korisnik)
+                call.respond(MessageResponse("TRUE"))
             } catch (e: Exception) {
                 e.printStackTrace()
                 call.respond(HttpStatusCode.BadRequest, MessageResponse("Failed to insert Korisnik"))
@@ -94,6 +97,21 @@ fun Application.configureRouting() {
                 call.respond(HttpStatusCode.BadRequest, MessageResponse("Failed "))
             }
         }
+
+        post("/selectAllTasksProject"){
+            try {
+                val conn = databaseService.getDatabaseConnection()
+                val repo = conn?.let { Repository(it) }
+                val pr = call.receive<NewProject>()
+
+                val result = repo?.selectAllTaskListsOfProject(pr.project)
+                call.respond(TasksListList(result))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                call.respond(HttpStatusCode.BadRequest, MessageResponse("Failed "))
+            }
+        }
+
         post("/chat") {
             val request = call.receive<Map<String, String>>() // očekuje JSON {"prompt": "tvoj tekst"}
             val prompt = request["prompt"] ?: ""

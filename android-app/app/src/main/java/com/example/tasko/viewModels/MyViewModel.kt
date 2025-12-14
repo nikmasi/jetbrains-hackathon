@@ -7,6 +7,7 @@ import com.example.tasko.data.Repository
 import com.example.tasko.data.retrofit.models.MessageResponse
 import com.example.tasko.data.retrofit.models.NewProject
 import com.example.tasko.data.retrofit.models.ProjectList
+import com.example.tasko.data.retrofit.models.TasksListList
 import com.example.tasko.data.retrofit.models.User
 import com.example.tasko.data.retrofit.models.UserRequest
 import com.example.tasko.screens.UserPreferences
@@ -32,6 +33,9 @@ class MyViewModel @Inject constructor(
 
     private val _uiStateProjectsList = MutableStateFlow(UiStateListProjects())
     val uiStateProjectsList: StateFlow<UiStateListProjects> = _uiStateProjectsList
+
+    private val _uiStateTasksListList = MutableStateFlow(UiStateListTasksList())
+    val uiStateTasksListList: StateFlow<UiStateListTasksList> = _uiStateTasksListList
 
     fun fetchLogin(username: String, password: String) = viewModelScope.launch {
         _uiState.value = _uiState.value.copy(isRefreshing = true)
@@ -108,6 +112,30 @@ class MyViewModel @Inject constructor(
         }
     }
 
+    fun fetchAllTasksListProject(name:String) = viewModelScope.launch {
+        _uiState.value = _uiState.value.copy(isRefreshing = true)
+
+        val username = userPreferences.usernameFlow.first() ?: ""
+        try {
+            val request = NewProject(name,username)
+            Log.d("RESPONSE","ovde")
+            val response = repository.selectAllTasksProject(request)
+
+            Log.d("RESPONSE",response.toString())
+
+            _uiStateTasksListList.value = UiStateListTasksList(
+                listTasks = response,
+                isRefreshing = false
+            )
+
+        } catch (e: Exception) {
+            _uiStateTasksListList.value = UiStateListTasksList(
+                listTasks = null,
+                isRefreshing = false
+            )
+        }
+    }
+
 }
 
 data class UiStateUser(
@@ -120,6 +148,12 @@ data class UiStateUser(
 
 data class UiStateListProjects(
     val listProjects: ProjectList? =null,
+    val isRefreshing: Boolean = false,
+    val error: String? = null,
+)
+
+data class UiStateListTasksList(
+    val listTasks: TasksListList? =null,
     val isRefreshing: Boolean = false,
     val error: String? = null,
 )

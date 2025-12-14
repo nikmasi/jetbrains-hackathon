@@ -7,6 +7,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import com.example.tasko.data.retrofit.models.Obaveza
 import com.example.tasko.data.retrofit.models.ProjectList
+import com.example.tasko.data.retrofit.models.TasksListList
 import com.example.tasko.data.retrofit.models.User
 import com.example.tasko.data.retrofit.models.UserRequest
 
@@ -32,4 +33,6 @@ interface ObavezaApi {
     @POST("createProject")
     suspend fun createProject(@Body newPr: NewProject): MessageResponse
 
+    @POST("selectAllTasksProject")
+    suspend fun selectAllTasksProject(@Body newPr: NewProject): TasksListList
 }

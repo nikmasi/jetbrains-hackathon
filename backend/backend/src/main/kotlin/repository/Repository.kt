@@ -102,6 +102,10 @@ class Repository(private val connection: Connection): RepoInterface {
 
                 // Dodaj korisnika u project_users
                 createProjectUsers(ProjectUsers(id_project = generatedId, id_user = userId))
+                createTaskList(TaskLists(1,generatedId,"TODO",1,userId))
+                createTaskList(TaskLists(1,generatedId,"IN PROCESS",2,userId))
+
+                createTaskList(TaskLists(1,generatedId,"DONE",3,userId))
                 return true
             }
 
@@ -392,7 +396,7 @@ class Repository(private val connection: Connection): RepoInterface {
         return results
     }
 
-    override fun selectAllTaskListsOfProject(project: Project): List<TaskLists> {
+    override fun selectAllTaskListsOfProject(project: String): List<TaskLists> {
         val query = """
             SELECT id, id_project, name, position, id_user_created
             FROM task_lists
