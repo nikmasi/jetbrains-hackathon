@@ -16,14 +16,4 @@ class ProjectService {
             }
         )
     }
-
-    fun projectExists(projectName: String, username: String, password: String): Boolean {
-        val response = Http.post(
-            "${apiURL}/createProject",
-            buildJsonObject {
-                put("username", projectName)
-                put("username", username)
-            }
-        )
-    }
 }
