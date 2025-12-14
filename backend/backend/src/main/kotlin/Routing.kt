@@ -145,10 +145,27 @@ fun Application.configureRouting() {
             }
         }
 
+        post("/selectAllTasksOfTaskLists2"){
+            try {
+                val conn = databaseService.getDatabaseConnection()
+                val repo = conn?.let { Repository(it) }
+                val pr = call.receive<TaskName>()
+                print("ovdee")
+
+                val result = repo?.selectAllTasksOfTaskLists2(pr)
+                println(result)
+                call.respond(ListTasks(result))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                call.respond(HttpStatusCode.BadRequest, MessageResponse("Failed "))
+            }
+        }
+
         post("/chat") {
             val request = call.receive<Map<String, String>>() // očekuje JSON {"prompt": "tvoj tekst"}
             val prompt = request["prompt"] ?: ""
             val response = openAiService.sendMessage(prompt)
+            println(response)
             call.respond(mapOf("response" to response))
         }
 

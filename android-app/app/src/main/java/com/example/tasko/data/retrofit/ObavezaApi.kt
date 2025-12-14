@@ -1,5 +1,7 @@
 package com.example.tasko.data.retrofit
 
+import com.example.tasko.data.retrofit.models.ChatRequest
+import com.example.tasko.data.retrofit.models.ChatResponse
 import com.example.tasko.data.retrofit.models.ListTasks
 import com.example.tasko.data.retrofit.models.MessageResponse
 import com.example.tasko.data.retrofit.models.NewProject
@@ -38,6 +40,9 @@ interface ObavezaApi {
     @POST("selectAllTasksProject")
     suspend fun selectAllTasksProject(@Body newPr: NewProject): TasksListList
 
-    @POST("selectAllTasksOfTaskLists")
+    @POST("selectAllTasksOfTaskLists2")
     suspend fun selectAllTasksOfTaskLists(@Body tn: TaskName): ListTasks
+
+    @POST("chat")
+    suspend fun chat(@Body tn: ChatRequest): ChatResponse
 }

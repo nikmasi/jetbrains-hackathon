@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -26,8 +27,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.room.util.TableInfo
 import com.example.tasko.data.retrofit.models.TaskLists
 import com.example.tasko.viewModels.MyViewModel
+import com.example.tasko.viewModels.UiStateListTasks
 
 data class Project(
     val title: String,
@@ -38,8 +41,15 @@ data class Project(
 fun ProjectScreen(projects: List<Project>, onAddProject: () -> Unit, onAddItem: (Project) -> Unit, onSettingsClick : ()->Unit,onAccountClick : ()->Unit,projectName:String,myViewModel: MyViewModel) {
 
     val uiState by myViewModel.uiStateTasksListList.collectAsState()
+    val uiStateL by myViewModel.uiStateTasksL.collectAsState()
     val tasksList = uiState.listTasks
     val tasksItems = tasksList?.taskst ?: emptyList()
+
+    val tasksMap by myViewModel.tasksByTaskListId.collectAsState()
+
+
+
+
 
     Column(
         modifier = Modifier
@@ -75,17 +85,131 @@ fun ProjectScreen(projects: List<Project>, onAddProject: () -> Unit, onAddItem: 
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(tasksItems) { project ->
-                ProjectCard(project = project, onAddItem = {  })
+                ProjectCard(project = project, onAddItem = {  },uiStateL)
             }
             item {
                 EmptyProjectCard(onClick = { onAddProject() })
             }
         }
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = "AI Suggestions",
+            color = Color.White,
+            fontSize = 20.sp,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        val aiResult by myViewModel.aiResult.collectAsState()
+
+
+        if (aiResult == null) {
+
+            LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+
+                item {
+                    AiSuggestionCard(
+                        title = "Generate To Do tasks",
+                        subtitle = "Suggest tasks for this project $projectName",
+                        onClick = {
+
+                        },
+                        myViewModel
+                    )
+
+                }
+
+                item {
+                    AiSuggestionCard(
+                        title = "Estimate tasks duration",
+                        subtitle = "How long will tasks take?",
+                        onClick = {
+
+                        },
+                        myViewModel
+                    )
+                }
+
+                item {
+                    AiSuggestionCard(
+                        title = "Plan 7-day sprint",
+                        subtitle = "Sprint planning based on tasks",
+                        onClick = {
+
+                        },
+                        myViewModel
+                    )
+                }
+
+
+            }
+
+        } else {
+
+            // 🧠 AI RESULT VIEW
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFF333333)),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+
+                    Text(
+                        text = aiResult!!,
+                        color = Color.White,
+                        fontSize = 14.sp
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Text(
+                        text = "← Back to AI suggestions",
+                        color = Color.Cyan,
+
+                    )
+                    Button(onClick = {
+                        myViewModel.resetAiResult()
+                    }) {Text("back") }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+        Text("OR")
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = "Your Suggestion",
+            color = Color.White,
+            fontSize = 20.sp,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
+        val aiResult2 by myViewModel.aiResult2.collectAsState()
+        var suggestion by remember { mutableStateOf("") }
+
+        SimpleInputWithButton(
+            inputText = suggestion,
+            onInputChange = { suggestion = it },
+            onButtonClick = {
+                myViewModel.sendAiPrompt2("I am developer. Response in 3 sentences. "+suggestion)
+            },
+
+        )
+        if(aiResult2!=null){
+            Text(" ${aiResult2.toString()}",color=Color.White)
+
+        }
+
+
+
+
+
     }
 }
 
 @Composable
-fun ProjectCard(project: TaskLists, onAddItem: () -> Unit) {
+fun ProjectCard(project: TaskLists, onAddItem: () -> Unit,uiStateL: UiStateListTasks) {
     var isAddingTask by remember { mutableStateOf(false) }
     var taskText by remember { mutableStateOf("") }
 
@@ -113,6 +237,17 @@ fun ProjectCard(project: TaskLists, onAddItem: () -> Unit) {
                     color = Color.LightGray,
                     fontSize = 14.sp
                 )
+
+                uiStateL.lista?.tasks?.forEach {
+                    if(it.id_task_list==project.id){
+                        Text(
+                            text = "• ${it.title}",
+                            color = Color.White,
+                            fontSize = 14.sp,
+                            modifier = Modifier.padding(top = 4.dp)
+                        )
+                    }
+                }
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -186,3 +321,79 @@ fun EmptyProjectCard(onClick: () -> Unit) {
         }
     }
 }
+@Composable
+fun AiSuggestionCard(
+    title: String,
+    subtitle: String,
+    onClick: () -> Unit,
+    myViewModel: MyViewModel
+) {
+    Card(
+        modifier = Modifier
+            .width(220.dp)
+            .height(100.dp)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = LocalIndication.current,
+                onClick = {  myViewModel.sendAiPrompt("I am developer. Response in 5-6 sentences. "+title+subtitle) }
+            ),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF444444)),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(12.dp),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = title,
+                color = Color.White,
+                fontSize = 14.sp
+            )
+            Text(
+                text = subtitle,
+                color = Color.LightGray,
+                fontSize = 12.sp
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SimpleInputWithButton(
+    inputText: String,
+    onInputChange: (String) -> Unit,
+    onButtonClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        OutlinedTextField(
+            value = inputText,
+            onValueChange = onInputChange,
+            label = { Text("Enter your suggestion") },
+            modifier = Modifier.fillMaxWidth(),
+            colors = OutlinedTextFieldDefaults.colors(
+                // Use focusedTextColor and unfocusedTextColor for the input text
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+
+                // ... other color parameters for Material 3
+                focusedBorderColor = Color.White,
+                unfocusedBorderColor = Color.White,
+                focusedLabelColor = Color.White,
+                unfocusedLabelColor = Color.White,
+            )
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(
+            onClick = onButtonClick,
+            modifier = Modifier.align(Alignment.End)
+        ) {
+            Text("Send")
+        }
+    }
+}
+

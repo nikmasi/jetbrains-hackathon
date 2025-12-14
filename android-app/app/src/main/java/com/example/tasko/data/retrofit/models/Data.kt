@@ -85,9 +85,21 @@ data class TasksListList(
 )
 
 
+
+
 @Serializable
 data class TaskName(
     val name:Int
+)
+
+@Serializable
+data class ChatRequest(
+    val prompt: String
+)
+
+@Serializable
+data class ChatResponse(
+    val response: String
 )
 
 @Serializable

@@ -491,6 +491,42 @@ class Repository(private val connection: Connection): RepoInterface {
         return results
     }
 
+    fun selectAllTasksOfTaskLists2(taskLists: TaskName): List<Task> {
+        val query = """
+            SELECT id, id_task_list, title, body_text, position, checked, id_user_created
+            FROM tasks
+            ORDER BY position
+        """
+
+        val results = mutableListOf<Task>()
+        var statement: PreparedStatement? = null
+
+        try {
+            statement = connection.prepareStatement(query)
+            val rs = statement.executeQuery()
+            while (rs.next()) {
+                results.add(
+                    Task(
+                        id = rs.getInt("id"),
+                        id_task_list = rs.getInt("id_task_list"),
+                        title = rs.getString("title"),
+                        body_text = rs.getString("body_text"),
+                        position = rs.getInt("position"),
+                        checked = rs.getInt("checked"),
+                        id_user_created = rs.getInt("id_user_created")
+                    )
+                )
+            }
+            rs.close()
+        } catch (e: SQLException) {
+            e.printStackTrace()
+        } finally {
+            closeResources(connection, statement, null)
+        }
+
+        return results
+    }
+
     override fun updateProject(project: Project): Boolean {
         val query = """
             UPDATE projects SET name = ? WHERE id = ?

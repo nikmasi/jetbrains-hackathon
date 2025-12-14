@@ -1,6 +1,8 @@
 package com.example.tasko.data
 
 import com.example.tasko.data.retrofit.ObavezaApi
+import com.example.tasko.data.retrofit.models.ChatRequest
+import com.example.tasko.data.retrofit.models.ChatResponse
 import com.example.tasko.data.retrofit.models.ListTasks
 import com.example.tasko.data.retrofit.models.MessageResponse
 import com.example.tasko.data.retrofit.models.NewProject
@@ -30,4 +32,6 @@ class Repository @Inject constructor(
     suspend fun selectAllTasksProject(@Body newPr: NewProject): TasksListList = obavezaApi.selectAllTasksProject(newPr)
 
     suspend fun selectAllTasksOfTaskLists(@Body tn: TaskName): ListTasks = obavezaApi.selectAllTasksOfTaskLists(tn)
+
+    suspend fun chat(@Body tn: ChatRequest): ChatResponse = obavezaApi.chat(tn)
 }

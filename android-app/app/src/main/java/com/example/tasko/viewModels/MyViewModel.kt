@@ -4,9 +4,12 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tasko.data.Repository
+import com.example.tasko.data.retrofit.models.ChatRequest
+import com.example.tasko.data.retrofit.models.ListTasks
 import com.example.tasko.data.retrofit.models.MessageResponse
 import com.example.tasko.data.retrofit.models.NewProject
 import com.example.tasko.data.retrofit.models.ProjectList
+import com.example.tasko.data.retrofit.models.Task
 import com.example.tasko.data.retrofit.models.TaskName
 import com.example.tasko.data.retrofit.models.TasksListList
 import com.example.tasko.data.retrofit.models.User
@@ -37,6 +40,15 @@ class MyViewModel @Inject constructor(
 
     private val _uiStateTasksListList = MutableStateFlow(UiStateListTasksList())
     val uiStateTasksListList: StateFlow<UiStateListTasksList> = _uiStateTasksListList
+
+    private val _uiStateTasksL = MutableStateFlow(UiStateListTasks())
+    val uiStateTasksL: StateFlow<UiStateListTasks> = _uiStateTasksL
+
+    private val _tasksByTaskListId =
+        MutableStateFlow<Map<Int, List<Task>>>(emptyMap())
+
+    val tasksByTaskListId: StateFlow<Map<Int, List<Task>>> =
+        _tasksByTaskListId
 
     fun fetchLogin(username: String, password: String) = viewModelScope.launch {
         _uiState.value = _uiState.value.copy(isRefreshing = true)
@@ -113,39 +125,27 @@ class MyViewModel @Inject constructor(
         }
     }
 
-    fun fetchAllTasksListProject(name:String) = viewModelScope.launch {
-        _uiState.value = _uiState.value.copy(isRefreshing = true)
+    fun fetchAllTasksListProject(name: String) = viewModelScope.launch {
 
         val username = userPreferences.usernameFlow.first() ?: ""
+
         try {
-            val request = NewProject(name,username)
-            Log.d("RESPONSE","ovde")
+            val request = NewProject(name, username)
             val response = repository.selectAllTasksProject(request)
 
-            Log.d("RESPONSE",response.toString())
-
+            val taskLists = response.taskst ?: emptyList()
 
             _uiStateTasksListList.value = UiStateListTasksList(
                 listTasks = response,
                 isRefreshing = false
             )
-            /*
-            response.taskst?.forEach { taskList ->
 
-                launch {
-                    val tasks = repository.selectAllTasksOfTaskLists(TaskName(taskList.id))
-
-                    // 3️⃣ Update state (VAŽNO: immutable copy)
-                    response.taskst.update { currentMap ->
-                        currentMap + (taskList.id to tasks)
-                    }
-                }
-            }*/
-
-
-
+            //
+                fetchAllTasksOfTaskList(1)
+            //}
 
         } catch (e: Exception) {
+            e.printStackTrace()
             _uiStateTasksListList.value = UiStateListTasksList(
                 listTasks = null,
                 isRefreshing = false
@@ -153,9 +153,64 @@ class MyViewModel @Inject constructor(
         }
     }
 
-    fun fetchAllTasksTasksList(name:Int) = viewModelScope.launch {
 
+
+    fun fetchAllTasksOfTaskList(taskListId: Int) = viewModelScope.launch {
+        try {
+            val response = repository.selectAllTasksOfTaskLists(
+                TaskName(taskListId)
+            )
+            Log.d("RESSSS", response.toString())
+
+
+            _uiStateTasksL.value = UiStateListTasks(
+                lista = response,
+                isRefreshing = false
+            )
+
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
+
+    private val _aiResult = MutableStateFlow<String?>(null)
+    val aiResult: StateFlow<String?> = _aiResult
+
+
+    private val _aiResult2 = MutableStateFlow<String?>(null)
+    val aiResult2: StateFlow<String?> = _aiResult2
+
+    fun sendAiPrompt(prompt: String) {
+
+        viewModelScope.launch {
+            try {
+                val result = repository.chat(ChatRequest(prompt))
+                _aiResult.value = "AI Response: " +result.response.toString()
+            } catch (e: Exception) {
+                _aiResult.value = "Error: ${e.message}"
+            }
+        }
+    }
+
+    fun sendAiPrompt2(prompt: String) {
+
+        viewModelScope.launch {
+            try {
+                val result = repository.chat(ChatRequest(prompt))
+                _aiResult2.value = "AI Response: " +result.response.toString()
+            } catch (e: Exception) {
+                _aiResult2.value = "Error: ${e.message}"
+            }
+        }
+    }
+
+    fun resetAiResult() {
+        _aiResult.value = null
+    }
+
+
+
 
 }
 
@@ -175,6 +230,12 @@ data class UiStateListProjects(
 
 data class UiStateListTasksList(
     val listTasks: TasksListList? =null,
+    val isRefreshing: Boolean = false,
+    val error: String? = null,
+)
+
+data class UiStateListTasks(
+    val lista: ListTasks? =null,
     val isRefreshing: Boolean = false,
     val error: String? = null,
 )
