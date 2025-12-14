@@ -8,11 +8,10 @@ import com.intellij.openapi.ui.ComboBox
 import org.delite.alt.ctrl.taskoplugin.services.TaskListService
 import org.delite.alt.ctrl.taskoplugin.services.TaskService
 import com.intellij.openapi.ui.Messages
-import com.intellij.ui.components.JBScrollPane
-import com.intellij.ui.util.minimumHeight
 import org.delite.alt.ctrl.taskoplugin.services.ProjectService
 import org.delite.alt.ctrl.taskoplugin.services.TaskoLoginStateService
 import java.awt.BorderLayout
+import java.awt.Component.LEFT_ALIGNMENT
 import javax.swing.JButton
 import javax.swing.JPanel
 import java.awt.event.ItemEvent
@@ -102,7 +101,6 @@ class BoardComponent(val project: Project, val onLogout: () -> Unit) {
 
             add(JBPanel<JBPanel<*>>().apply {
                 layout = BoxLayout(this, BoxLayout.Y_AXIS)
-                maximumSize = Dimension(Int.MAX_VALUE, Int.MAX_VALUE)
 
                 for (t in TaskService.getTasks(taskListIdx).sortedBy { it.position }) {
                     add(TaskComponent(t).getContent())
