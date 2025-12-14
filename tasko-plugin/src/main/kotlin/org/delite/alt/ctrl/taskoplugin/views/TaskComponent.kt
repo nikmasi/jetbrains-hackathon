@@ -10,7 +10,6 @@ import javax.swing.SwingConstants
 import java.awt.Color
 import java.awt.Font
 import javax.swing.JButton
-import javax.swing.JPanel
 
 class TaskComponent(val task: Task) {
     private val content = JBPanel<JBPanel<*>>().apply {

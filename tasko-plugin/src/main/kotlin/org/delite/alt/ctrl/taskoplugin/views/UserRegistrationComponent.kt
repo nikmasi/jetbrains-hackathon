@@ -83,13 +83,11 @@ class UserRegistrationComponent(private val onRegisterSuccess: (username: String
                 if (firstPasswordField.text != secondPasswordField.text) {
                     errorMessageLabel.text = "Registration failed. Passwords don't match."
                 }
+                else if (!UserService.register(firstNameField.text, lastNameField.text, usernameField.text, emailField.text, firstPasswordField.text)) {
+                    errorMessageLabel.text = "Registration failed! User with that username might already exist, also please check the email that you have entered!"
+                }
                 else {
-                    if (!UserService.register(firstNameField.text, lastNameField.text, usernameField.text, emailField.text, firstPasswordField.text)) {
-                        errorMessageLabel.text = "Registration failed! User with that username might already exist, also please check the email that you have entered!"
-                    }
-                    else {
-                        onRegisterSuccess(usernameField.text, secondPasswordField.text)
-                    }
+                    onRegisterSuccess(usernameField.text, secondPasswordField.text)
                 }
             }
         })
