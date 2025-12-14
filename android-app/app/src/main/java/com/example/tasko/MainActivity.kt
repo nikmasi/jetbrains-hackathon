@@ -94,13 +94,16 @@ fun TaskoApp() {
                     onAccountClick = { navController.navigate(Destinations.AccountScreen.route) }
                 )
             }
+
+            
             composable(route = Destinations.ProjectSettingsScreen.route){
                 ProjectSettingsScreen(
                     "ProjectName",
                     members,
-                    {navController.navigate(Destinations.ProjectScreen.route+"/"+)}
+                    {navController.navigate(Destinations.ProjectScreen.route)}
                 )
             }
+
             composable(route = Destinations.AccountScreen.route){
                 val userName = "Masa"
                 val userEmail = "masa@example.com"
@@ -124,7 +127,8 @@ fun TaskoApp() {
                     navController,myViewModel
                 )
             }
-            composable(route = Destinations.ProjectListScreen.route){
+            composable(route = Destinations.ProjectListScreen.route)
+            {
                 ProjectListScreen(
                     onProjectClick = { project ->
                         // npr. navigacija na detalje projekta
@@ -134,6 +138,8 @@ fun TaskoApp() {
                     myViewModel = myViewModel
                 )
             }
+
+
         }
     }
 }
