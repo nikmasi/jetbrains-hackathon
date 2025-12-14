@@ -200,11 +200,6 @@ fun ProjectScreen(projects: List<Project>, onAddProject: () -> Unit, onAddItem: 
             Text(" ${aiResult2.toString()}",color=Color.White)
 
         }
-
-
-
-
-
     }
 }
 
