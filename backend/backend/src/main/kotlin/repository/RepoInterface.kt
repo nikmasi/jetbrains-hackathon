@@ -18,7 +18,7 @@ interface RepoInterface {
     fun selectProjectUsersOfProject(project: Project): List<User>
     fun selectProjectInvitesOfProject(project: Project): List<User>
     fun selectAllTaskListsOfProject(project: String): List<TaskLists>
-    fun selectAllTasksOfTaskLists(taskLists: TaskLists): List<Task>
+    fun selectAllTasksOfTaskLists(taskLists: TaskName): List<Task>
 
     fun updateProject(project: Project): Boolean // Changing project name
     fun updateTaskTitle(task: Task): Boolean // Changing tasks title

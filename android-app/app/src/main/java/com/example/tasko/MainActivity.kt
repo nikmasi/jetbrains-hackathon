@@ -14,10 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.tasko.screens.Destinations
 import com.example.tasko.screens.auth.AccountScreen
 import com.example.tasko.screens.auth.FirstScreen
@@ -85,7 +87,7 @@ fun TaskoApp() {
                     println("Register: $firstName $lastName, username=$username, email=$email")
                 }
             }
-            composable(route = Destinations.ProjectScreen.route){
+            /*composable(route = Destinations.ProjectScreen.route){
                 ProjectScreen(
                     projects = sampleProjects,
                     onAddProject = { /* Open dialog / screen for new project */ },
@@ -93,9 +95,29 @@ fun TaskoApp() {
                     onSettingsClick = { navController.navigate(Destinations.ProjectSettingsScreen.route) },
                     onAccountClick = { navController.navigate(Destinations.AccountScreen.route) }
                 )
+            }*/
+            composable(
+                route = Destinations.ProjectScreen.route + "/{name}",
+                arguments = listOf(
+                    navArgument("name") { type = NavType.StringType }
+                )
+            ) { navBackStackEntry ->
+
+                val projectName = navBackStackEntry.arguments?.getString("name") ?: ""
+
+                ProjectScreen(
+                    projects = sampleProjects,
+                    onAddProject = { /* Open dialog / screen for new project */ },
+                    onAddItem = { project -> /* Open dialog to add item to project */ },
+                    onSettingsClick = { navController.navigate(Destinations.ProjectSettingsScreen.route) },
+                    onAccountClick = { navController.navigate(Destinations.AccountScreen.route) },
+                    projectName=projectName,
+                    myViewModel=myViewModel
+                )
             }
 
-            
+
+
             composable(route = Destinations.ProjectSettingsScreen.route){
                 ProjectSettingsScreen(
                     "ProjectName",
@@ -135,7 +157,8 @@ fun TaskoApp() {
                         navController.navigate(Destinations.ProjectScreen.route)
                     },
                     projects2 = sampleProjects2,
-                    myViewModel = myViewModel
+                    myViewModel = myViewModel,
+                    navController = navController
                 )
             }
 

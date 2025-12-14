@@ -1,10 +1,12 @@
 package com.example.tasko.data
 
 import com.example.tasko.data.retrofit.ObavezaApi
+import com.example.tasko.data.retrofit.models.ListTasks
 import com.example.tasko.data.retrofit.models.MessageResponse
 import com.example.tasko.data.retrofit.models.NewProject
 import com.example.tasko.data.retrofit.models.Obaveza
 import com.example.tasko.data.retrofit.models.ProjectList
+import com.example.tasko.data.retrofit.models.TaskName
 import com.example.tasko.data.retrofit.models.TasksListList
 import com.example.tasko.data.retrofit.models.User
 import com.example.tasko.data.retrofit.models.UserRequest
@@ -25,7 +27,7 @@ class Repository @Inject constructor(
     suspend fun selectProjectUser(@Body userReq: UserRequest): ProjectList = obavezaApi.selectProjectUser(userReq)
 
     suspend fun createProject(@Body newPr: NewProject): MessageResponse = obavezaApi.createProject(newPr)
-
-
     suspend fun selectAllTasksProject(@Body newPr: NewProject): TasksListList = obavezaApi.selectAllTasksProject(newPr)
+
+    suspend fun selectAllTasksOfTaskLists(@Body tn: TaskName): ListTasks = obavezaApi.selectAllTasksOfTaskLists(tn)
 }
