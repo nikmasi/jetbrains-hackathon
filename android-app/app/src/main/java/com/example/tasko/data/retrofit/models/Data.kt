@@ -74,11 +74,36 @@ data class TaskLists(
     val id_project:Int,
     val name:String,
     val position:Int,
-    val id_user_created:Int
+    val id_user_created:Int,
+    //val tasks: List<Task> = emptyList()
     //val time_created:Instant
 )
 
 @Serializable
 data class TasksListList(
     val taskst: List<TaskLists>?
+)
+
+
+@Serializable
+data class TaskName(
+    val name:Int
+)
+
+@Serializable
+data class ListTasks(
+    val tasks: List<Task>?
+)
+
+@Serializable
+data class Task(
+    val id:Int,
+    val id_task_list:Int,
+    val title:String,
+    val body_text:String,
+    val position:Int,
+    val checked:Int,
+    val id_user_created:Int
+    //val time_created:Instant
+    //val time_changed:Instant
 )

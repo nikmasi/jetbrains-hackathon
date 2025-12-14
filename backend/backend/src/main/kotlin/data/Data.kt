@@ -21,7 +21,10 @@ data class UserRequest(
     val hashed_password:String
 )
 
-
+@Serializable
+data class TaskName(
+    val name:Int
+)
 @Serializable
 data class MessageResponse(
     val message: String
@@ -88,6 +91,10 @@ data class TaskLists(
     val position:Int,
     val id_user_created:Int
     //val time_created:Instant
+)
+@Serializable
+data class ListTasks(
+    val tasks: List<Task>?
 )
 
 @Serializable

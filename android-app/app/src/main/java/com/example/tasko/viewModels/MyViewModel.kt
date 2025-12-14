@@ -7,6 +7,7 @@ import com.example.tasko.data.Repository
 import com.example.tasko.data.retrofit.models.MessageResponse
 import com.example.tasko.data.retrofit.models.NewProject
 import com.example.tasko.data.retrofit.models.ProjectList
+import com.example.tasko.data.retrofit.models.TaskName
 import com.example.tasko.data.retrofit.models.TasksListList
 import com.example.tasko.data.retrofit.models.User
 import com.example.tasko.data.retrofit.models.UserRequest
@@ -123,10 +124,26 @@ class MyViewModel @Inject constructor(
 
             Log.d("RESPONSE",response.toString())
 
+
             _uiStateTasksListList.value = UiStateListTasksList(
                 listTasks = response,
                 isRefreshing = false
             )
+            /*
+            response.taskst?.forEach { taskList ->
+
+                launch {
+                    val tasks = repository.selectAllTasksOfTaskLists(TaskName(taskList.id))
+
+                    // 3️⃣ Update state (VAŽNO: immutable copy)
+                    response.taskst.update { currentMap ->
+                        currentMap + (taskList.id to tasks)
+                    }
+                }
+            }*/
+
+
+
 
         } catch (e: Exception) {
             _uiStateTasksListList.value = UiStateListTasksList(
@@ -134,6 +151,10 @@ class MyViewModel @Inject constructor(
                 isRefreshing = false
             )
         }
+    }
+
+    fun fetchAllTasksTasksList(name:Int) = viewModelScope.launch {
+
     }
 
 }

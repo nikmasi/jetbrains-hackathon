@@ -1,10 +1,11 @@
 package com.example
 
-import com.example.data.CreateProjectRequest
+import com.example.data.ListTasks
 import com.example.data.MessageResponse
 import com.example.data.NewProject
-import com.example.data.Project
 import com.example.data.ProjectList
+import com.example.data.Task
+import com.example.data.TaskName
 import com.example.data.TasksListList
 import com.example.data.User
 import com.example.data.UserRequest
@@ -82,6 +83,22 @@ fun Application.configureRouting() {
                 call.respond(HttpStatusCode.BadRequest, MessageResponse("Failed "))
             }
         }
+
+        post("/createTask"){
+            try {
+                val conn = databaseService.getDatabaseConnection()
+                val repo = conn?.let { Repository(it) }
+                val pr = call.receive<Task>()
+
+                repo?.createTask(pr)
+
+                call.respond(HttpStatusCode.OK, MessageResponse("Inserted Project Successfully"))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                call.respond(HttpStatusCode.BadRequest, MessageResponse("Failed "))
+            }
+        }
+
         post("/selectProjectUser"){
             try {
                 val conn = databaseService.getDatabaseConnection()
@@ -107,6 +124,21 @@ fun Application.configureRouting() {
                 val result = repo?.selectAllTaskListsOfProject(pr.project)
                 println(result)
                 call.respond(TasksListList(result))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                call.respond(HttpStatusCode.BadRequest, MessageResponse("Failed "))
+            }
+        }
+
+        post("/selectAllTasksOfTaskLists"){
+            try {
+                val conn = databaseService.getDatabaseConnection()
+                val repo = conn?.let { Repository(it) }
+                val pr = call.receive<TaskName>()
+
+                val result = repo?.selectAllTasksOfTaskLists(pr)
+                println(result)
+                call.respond(ListTasks(result))
             } catch (e: Exception) {
                 e.printStackTrace()
                 call.respond(HttpStatusCode.BadRequest, MessageResponse("Failed "))

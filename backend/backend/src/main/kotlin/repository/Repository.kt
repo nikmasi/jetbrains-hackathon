@@ -1,7 +1,6 @@
 package com.example.repository
 
 import com.example.closeResources
-import com.example.data.CreateProjectRequest
 import com.example.data.NewProject
 import com.example.data.Project
 import com.example.data.Project2
@@ -9,11 +8,10 @@ import com.example.data.ProjectInvites
 import com.example.data.ProjectUsers
 import com.example.data.Task
 import com.example.data.TaskLists
+import com.example.data.TaskName
 import com.example.data.User
 import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import kotlinx.datetime.toJavaInstant
-import kotlinx.datetime.toKotlinInstant
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -455,7 +453,7 @@ class Repository(private val connection: Connection): RepoInterface {
         return results
     }
 
-    override fun selectAllTasksOfTaskLists(taskLists: TaskLists): List<Task> {
+    override fun selectAllTasksOfTaskLists(taskLists: TaskName): List<Task> {
         val query = """
             SELECT id, id_task_list, title, body_text, position, checked, id_user_created
             FROM tasks
@@ -468,7 +466,7 @@ class Repository(private val connection: Connection): RepoInterface {
 
         try {
             statement = connection.prepareStatement(query)
-            statement.setInt(1, taskLists.id)
+            statement.setInt(1, taskLists.name)
             val rs = statement.executeQuery()
             while (rs.next()) {
                 results.add(
