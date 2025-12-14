@@ -4,12 +4,12 @@ import com.intellij.ui.JBColor
 import com.intellij.ui.components.JBBox
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBPanel
-import org.delite.alt.ctrl.taskoplugin.common.TaskoConstants
 import org.delite.alt.ctrl.taskoplugin.models.Task
 import javax.swing.JSeparator
 import javax.swing.SwingConstants
 import java.awt.Color
 import java.awt.Font
+import javax.swing.JButton
 import javax.swing.JPanel
 
 class TaskComponent(val task: Task) {
@@ -25,10 +25,12 @@ class TaskComponent(val task: Task) {
 
             add(JSeparator(SwingConstants.HORIZONTAL))
 
-            if (task.body_text.length > TaskoConstants.TASK_MAXIMUM_BODY_SIZE)
-                add(JBLabel("${task.body_text.take(TaskoConstants.TASK_MAXIMUM_BODY_SIZE)}..."))
+            if (task.body_text.length > 100)
+                add(JBLabel("${task.body_text.take(100)}..."))
             else
                 add(JBLabel(task.body_text))
+
+            add(JButton("Edit Task"))
         })
     }
 

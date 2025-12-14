@@ -19,7 +19,7 @@ import javax.swing.JButton
 import javax.swing.JComponent
 import javax.swing.SwingConstants
 
-class UserRegistrationComponent(private val onRegisterSuccess: (User) -> Unit) {
+class UserRegistrationComponent(private val onRegisterSuccess: (username: String, password: String) -> Unit) {
     private val content = JBPanel<JBPanel<*>>().apply {
         add(JBBox.createVerticalBox().apply {
             val firstNameField = JBTextField().apply { columns = 30 }
@@ -84,12 +84,11 @@ class UserRegistrationComponent(private val onRegisterSuccess: (User) -> Unit) {
                     errorMessageLabel.text = "Registration failed. Passwords don't match."
                 }
                 else {
-                    val user = UserService.register(firstNameField.text, lastNameField.text, usernameField.text, emailField.text, firstPasswordField.text)
-                    if (user != null) {
-                        onRegisterSuccess(user)
+                    if (!UserService.register(firstNameField.text, lastNameField.text, usernameField.text, emailField.text, firstPasswordField.text)) {
+                        errorMessageLabel.text = "Registration failed! User with that username might already exist, also please check the email that you have entered!"
                     }
                     else {
-                        errorMessageLabel.text = "Registration failed! User with that username might already exist, also please check the email that you have entered!"
+                        onRegisterSuccess(usernameField.text, secondPasswordField.text)
                     }
                 }
             }

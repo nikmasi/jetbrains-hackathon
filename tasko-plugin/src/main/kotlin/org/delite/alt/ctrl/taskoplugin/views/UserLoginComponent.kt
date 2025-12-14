@@ -18,7 +18,7 @@ import javax.swing.JButton
 import javax.swing.JComponent
 import javax.swing.SwingConstants
 
-class UserLoginComponent(private val onLoginSuccess: (User) -> Unit) {
+class UserLoginComponent(private val onLoginSuccess: (username: String, password: String) -> Unit) {
     private val content = JBPanel<JBPanel<*>>().apply {
         add(JBBox.createVerticalBox().apply {
             val usernameField = JBTextField().apply { columns = 30 }
@@ -67,12 +67,11 @@ class UserLoginComponent(private val onLoginSuccess: (User) -> Unit) {
             add(Box.createVerticalStrut(10))
 
             loginButton.addActionListener {
-                val user = UserService.login(usernameField.text, passwordField.text)
-                if (user != null) {
-                    onLoginSuccess(user)
+                if (!UserService.login(usernameField.text, passwordField.text)) {
+                    errorMessageLabel.text = "Invalid credentials! Or unstable internet connection!"
                 }
                 else {
-                    errorMessageLabel.text = "Login failed. Please check if you entered valid credentials."
+                    onLoginSuccess(usernameField.text, passwordField.text)
                 }
             }
         })

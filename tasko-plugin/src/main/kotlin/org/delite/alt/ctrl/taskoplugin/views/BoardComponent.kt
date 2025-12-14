@@ -1,26 +1,20 @@
 package org.delite.alt.ctrl.taskoplugin.views
 
 import com.intellij.openapi.project.Project
-import com.intellij.ui.JBColor
-import java.awt.Color
 import com.intellij.ui.components.JBBox
 import com.intellij.ui.components.JBPanel
 import com.intellij.openapi.ui.ComboBox
-import org.delite.alt.ctrl.taskoplugin.models.Task
 import org.delite.alt.ctrl.taskoplugin.services.TaskListService
 import org.delite.alt.ctrl.taskoplugin.services.TaskService
-import org.jetbrains.kotlin.idea.gradleTooling.get
 import com.intellij.openapi.ui.Messages
-import org.delite.alt.ctrl.taskoplugin.models.TaskList
 import java.awt.BorderLayout
-import javax.swing.BoxLayout
 import javax.swing.JButton
 import javax.swing.JPanel
 import java.awt.event.ItemEvent
 import javax.swing.Box
 import java.awt.Dimension
 
-class BoardComponent(val project: Project) {
+class BoardComponent(val project: Project, val onLogout: () -> Unit) {
     private val content = JBPanel<JBPanel<*>>()
 
     init {
@@ -58,10 +52,27 @@ class BoardComponent(val project: Project) {
                 })
             })
 
+            add(JPanel(BorderLayout()).apply {
+                add(JButton("Logout").apply {
+                    addActionListener {
+                        onLogout()
+                    }
+                }, BorderLayout.CENTER)
+            })
+
             add(JBBox.createHorizontalBox().apply {
                 add(JButton("Create Task").apply {
                     alignmentX = JPanel.CENTER_ALIGNMENT
                     maximumSize = Dimension(Int.MAX_VALUE, preferredSize.height)
+
+                    addActionListener {
+                        TaskCreatorDialog(project, {
+                            title, bodyText ->
+                            TaskService.addTask(taskListIdx, title, bodyText)
+                        }).show()
+
+                        refreshUI(taskListIdx)
+                    }
                 })
 
                 add(JButton("TODOs to Tasks").apply {
@@ -73,7 +84,7 @@ class BoardComponent(val project: Project) {
             add(Box.createVerticalStrut(10))
 
             add(JBBox.createVerticalBox().apply {
-                for (t in TaskService.getTasks(taskListIdx)) {
+                for (t in TaskService.getTasks(taskListIdx).sortedBy { it.position }) {
                     add(TaskComponent(t).getContent())
                     add(Box.createVerticalStrut(10))
                 }
