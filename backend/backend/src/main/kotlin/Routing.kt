@@ -95,7 +95,7 @@ fun Application.configureRouting() {
                 call.respond(HttpStatusCode.OK, MessageResponse("Inserted Project Successfully"))
             } catch (e: Exception) {
                 e.printStackTrace()
-                call.respond(HttpStatusCode.BadRequest, MessageResponse("Failed "))
+                call.respond(HttpStatusCode.BadRequest, MessageResponse("Failed " + e.message))
             }
         }
 

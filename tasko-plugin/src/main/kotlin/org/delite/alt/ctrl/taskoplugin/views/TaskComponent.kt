@@ -5,6 +5,7 @@ import com.intellij.ui.components.JBBox
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBPanel
 import com.intellij.ui.util.minimumHeight
+import com.intellij.util.ui.JBUI
 import org.delite.alt.ctrl.taskoplugin.models.Task
 import java.awt.BorderLayout
 import javax.swing.JSeparator
@@ -22,18 +23,17 @@ class TaskComponent(val task: Task) {
         )
 
         layout = BorderLayout()
+        border = JBUI.Borders.empty(8, 12) // top, left/right padding
 
         add(JBBox.createVerticalBox().apply {
             add(JBLabel(task.title).apply { font = font.deriveFont(Font.BOLD, 16f) })
 
-            // add(JSeparator(SwingConstants.HORIZONTAL))
+            add(JSeparator(SwingConstants.HORIZONTAL))
 
             if (task.body_text.length > 100)
                 add(JBLabel("${task.body_text.take(100)}..."))
             else
                 add(JBLabel(task.body_text))
-
-            add(JButton("Edit Task"))
         })
     }
 
