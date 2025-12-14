@@ -66,3 +66,19 @@ data class NewProject(
     val project: String,
     val username: String
 )
+
+
+@Serializable
+data class TaskLists(
+    val id:Int,
+    val id_project:Int,
+    val name:String,
+    val position:Int,
+    val id_user_created:Int
+    //val time_created:Instant
+)
+
+@Serializable
+data class TasksListList(
+    val taskst: List<TaskLists>?
+)

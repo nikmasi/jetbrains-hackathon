@@ -98,7 +98,7 @@ fun TaskoApp() {
                 ProjectSettingsScreen(
                     "ProjectName",
                     members,
-                    {navController.navigate(Destinations.ProjectScreen.route)}
+                    {navController.navigate(Destinations.ProjectScreen.route+"/"+)}
                 )
             }
             composable(route = Destinations.AccountScreen.route){

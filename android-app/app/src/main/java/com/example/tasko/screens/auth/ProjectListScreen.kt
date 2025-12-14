@@ -116,12 +116,13 @@ fun ProjectListScreen(
 }
 
 @Composable
-fun ProjectListCard(project: Project, onClick: () -> Unit) {
+fun ProjectListCard(project: Project, onClick: (String) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(
-                onClick = onClick,
+                onClick =
+                    { onClick(project.name) },
                 indication = LocalIndication.current,
                 interactionSource = remember { MutableInteractionSource() }
             ),
