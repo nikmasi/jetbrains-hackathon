@@ -4,7 +4,7 @@ import com.intellij.openapi.components.*
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.util.userData
 
-data class LoginState(var username: String = "", var password: String = "") {
+data class LoginState(var username: String = "", var password: String = "", var taskListIdx: Int = -1) {
     fun loggedIn(): Boolean {
         return username.length + password.length > 0
     }
